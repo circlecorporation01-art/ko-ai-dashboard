@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KO AI業務自動化 全体像 | Knockout / Circle株式会社</title>
+<style>
+  :root{
+    --bg:#0e1014; --panel:#171a21; --panel2:#1e222b; --panel3:#232834; --line:#2a2f3a;
+    --text:#e8eaed; --muted:#9aa3b2; --accent:#e63946;
+    --green:#2ecc71; --amber:#f1c40f; --blue:#4d9fff; --orange:#ff8c42; --gray:#6b7280; --red:#ff5b6e; --purple:#b18cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+       background:var(--bg);color:var(--text);padding:28px 26px 70px;line-height:1.6;max-width:1320px;margin:0 auto}
+  h1{font-size:25px;letter-spacing:.02em}
+  h2{font-size:17px;margin:40px 0 16px;color:#fff;border-left:4px solid var(--accent);padding-left:11px}
+  h3{font-size:14px;color:var(--muted);margin:18px 0 8px;font-weight:600}
+  .sub{color:var(--muted);font-size:13px;margin-top:5px}
+  .grid{display:grid;gap:16px}
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .kpi .num{font-size:36px;font-weight:800;line-height:1}
+  .kpi .lbl{color:var(--muted);font-size:12.5px;margin-top:8px}
+  .bar{height:8px;background:var(--panel2);border-radius:6px;margin-top:8px;overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:6px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;color:#0b0d10;white-space:nowrap}
+  .b-green{background:var(--green)} .b-amber{background:var(--amber)} .b-blue{background:var(--blue);color:#fff}
+  .b-orange{background:var(--orange);color:#0b0d10} .b-gray{background:var(--gray);color:#fff} .b-red{background:var(--red);color:#fff}
+  .b-purple{background:var(--purple);color:#0b0d10}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:10px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px}
+  td b{color:#fff}
+  .role{color:var(--muted);font-size:12px}
+  .pbar{width:110px;display:inline-block;vertical-align:middle}
+  .legend{font-size:12.5px;color:var(--muted);margin-top:12px;display:flex;flex-wrap:wrap;gap:16px}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{background:var(--panel3);padding:1px 6px;border-radius:5px;font-size:12px;color:#cdd5e0}
+
+  .ok{background:#10261a;border:1px solid #1d5b34;border-radius:14px;padding:16px 18px}
+  .ok .at{color:var(--green);font-weight:800;font-size:14px;margin-bottom:8px}
+  .ok ul{margin:0 0 0 18px} .ok li{margin:6px 0;font-size:13px}
+
+  .feat{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .feat .f{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px;position:relative}
+  .feat .f .ic{font-size:22px}
+  .feat .f .ttl{font-weight:700;font-size:13.5px;margin:6px 0 4px;color:#fff}
+  .feat .f .ds{font-size:12px;color:var(--muted);line-height:1.5}
+  .feat .f.newf{border-color:#5a3a85;background:#1c1530}
+  .feat .f.newf .ttl{color:#d9c2ff}
+
+  .timeline{position:relative;padding:8px 0 4px;overflow-x:auto}
+  .tl-track{display:flex;gap:0;min-width:1100px;position:relative}
+  .tl-slot{flex:1;border-left:1px solid var(--line);padding:0 6px 8px;position:relative;min-width:74px}
+  .tl-time{font-size:11px;color:var(--muted);font-weight:700;padding:4px 0}
+  .tl-ev{font-size:11px;border-radius:7px;padding:5px 7px;margin-top:5px;line-height:1.35}
+  .tl-on{background:#10261a;border:1px solid #1d5b34;color:#cde7d6}
+  .tl-key{background:#2a1418;border:1px solid #5b1d28;color:#ffd2d7;font-weight:700}
+  .tl-dev{background:#1c1530;border:1px solid #5a3a85;color:#d9c2ff}
+
+  .grouptitle{font-weight:700;font-size:13px;margin:4px 0;padding:7px 11px;border-radius:9px;display:inline-block}
+  .g-on{background:#10331f;color:#7ee7a6;border:1px solid #1d5b34}
+  .g-dev{background:#231a3a;color:#cdb4ff;border:1px solid #5a3a85}
+
+  .note{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .flowmini{font-size:12px;color:#bcc6d6;background:var(--panel2);border-radius:8px;padding:7px 10px;margin-top:4px}
+  .flowmini b{color:#fff}
+
+  /* 商品開発フロー図 */
+  .devflow{display:grid;grid-template-columns:1fr;gap:0}
+  .dfrow{display:grid;grid-template-columns:1fr 30px 1fr;align-items:center;gap:0;margin:0}
+  .dfbox{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:12.5px}
+  .dfbox .h{font-weight:700;color:#fff;font-size:13px;margin-bottom:3px}
+  .dfbox.gate{border-color:#5b1d28;background:#2a1418}
+  .dfbox.gate .h{color:#ffd2d7}
+  .dfbox.data{border-color:#1d5b34;background:#10261a}
+  .dfbox.data .h{color:#7ee7a6}
+  .dfbox.sig{border-color:#2c4185;background:#10204a}
+  .dfbox.sig .h{color:#a8c6ff}
+  .dfarr{text-align:center;color:var(--accent);font-size:18px;font-weight:700}
+  .dfdown{text-align:center;color:#5a6378;font-size:20px;margin:4px 0}
+  .tag{display:inline-block;background:var(--panel3);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:11px;color:#cdd5e0;margin:2px 3px 0 0}
+
+  .splitbox{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .splitbox .b{border-radius:13px;padding:15px 17px}
+  .splitbox .sec{border:1px solid #2c4185;background:#0f1a33}
+  .splitbox .dev{border:1px solid #5a3a85;background:#1c1530}
+  .splitbox .b .t{font-weight:800;font-size:14px;margin-bottom:8px}
+  .splitbox .sec .t{color:#a8c6ff}
+  .splitbox .dev .t{color:#d9c2ff}
+  .splitbox .b ul{margin:0 0 0 17px;font-size:12.5px}
+  .splitbox .b li{margin:5px 0}
+
+  @media(max-width:980px){
+    .kpis{grid-template-columns:1fr 1fr}.feat{grid-template-columns:1fr 1fr}
+    .two{grid-template-columns:1fr}.splitbox{grid-template-columns:1fr}
+    .dfrow{grid-template-columns:1fr}.dfarr{transform:rotate(90deg)}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🤖 KO AI業務自動化 全体像</h1>
+  <div class="sub"><b>会社のどの仕事を・どのAIが・いつ動かしているか</b>を、非エンジニアでも1枚で把握 ・ Knockout ONLINE / Circle株式会社<br>
+  最終更新 <b>2026-05-26</b> ・ <b style="color:var(--purple)">NEW: 商品開発AIエージェントを新設</b>（秘書AI群とは別系統・統合台帳ベース）</div>
+</header>
+
+<div class="legend">
+  <span>🟢 <b style="color:var(--green)">秘書AI（稼働中）</b></span>
+  <span>🟣 <b style="color:var(--purple)">商品開発AI（新設）</b></span>
+  <span>種別: launchd=Mac常駐 ／ クラウドcron=claude.ai ／ GAS=Google上</span>
+</div>
+
+<!-- ① 何ができるようになったか -->
+<h2>① 何ができるようになったか（できること一覧）</h2>
+<div class="feat">
+  <div class="f"><div class="ic">📝</div><div class="ttl">日報の自動生成</div><div class="ds">PC操作ログから当日の業務日報を毎日18:00に自動作成。</div></div>
+  <div class="f"><div class="ic">✅</div><div class="ttl">承認の取りこぼし監視</div><div class="ds">夜レポ・承認待ちへの返信を平日5回（9/12/15/18/21時）拾って実行。</div></div>
+  <div class="f"><div class="ic">🏢</div><div class="ttl">店舗物件の自動リストアップ</div><div class="ds">不動産5サイトを毎日巡回し新規物件をTrelloへ。</div></div>
+  <div class="f"><div class="ic">🗂️</div><div class="ttl">Slack→Trello タスク化</div><div class="ds">議事録・依頼の投稿を検出してタスクカードに変換。</div></div>
+  <div class="f"><div class="ic">💴</div><div class="ttl">入金確認（SBI↔Shopify）</div><div class="ds">銀行入金と未入金注文を氏名＋金額で突合、高確度は自動で入金済化。</div></div>
+  <div class="f"><div class="ic">📈</div><div class="ttl">週次売上レポート</div><div class="ds">月曜09:00にShopify週次売上を集計→Doc→Slack #mtg議事録 へ。</div></div>
+  <div class="f"><div class="ic">𝕏</div><div class="ttl">X DM返信の下書き</div><div class="ds">未返信DMを検出し返信下書きを生成→承認待ちへ。</div></div>
+  <div class="f newf"><div class="ic">🧪</div><div class="ttl">商品開発AIエージェント <span class="badge b-purple">NEW</span></div><div class="ds">市場シグナル収集→週次の新商品候補提案。データは統合台帳、書込は社長承認の関所。</div></div>
+</div>
+
+<!-- ② 稼働中の自動化一覧 -->
+<h2>② 稼働中の自動化一覧</h2>
+
+<h3><span class="grouptitle g-on">🟢 秘書AI — 常駐・ローカル launchd（11本）</span></h3>
+<div class="card" style="padding:8px 14px">
+<table>
+  <tr><th style="width:18%">名前</th><th style="width:12%">種別</th><th style="width:14%">時刻(JST)</th><th style="width:34%">やること</th><th style="width:22%">確認場所</th></tr>
+  <tr><td><b>活動ログ収集</b></td><td>launchd</td><td>2分おき 24h</td><td>PC操作・Brave履歴・Slack・Trello投稿を集約（日報の元データ）</td><td><code>~/.local/logs/activity/</code></td></tr>
+  <tr><td><b>物件自動リストアップ</b></td><td>launchd</td><td>平日 10:33</td><td>店舗不動産5サイト巡回→新規物件をTrello投入</td><td>Trello「店舗物件候補」</td></tr>
+  <tr><td><b>Slack→Trello</b></td><td>launchd</td><td>毎朝 10:30</td><td>特定Slackメッセージ→Trelloカード化</td><td><code>slack-to-trello/logs/</code></td></tr>
+  <tr><td><b>日報自動生成(PCログ)</b></td><td>launchd</td><td>毎日 18:00</td><td>当日のPC活動ログをMarkdown日報に集約</td><td><code>~/.local/logs/daily-reports/</code></td></tr>
+  <tr><td><b>週次まとめ</b></td><td>launchd</td><td>金 18:30</td><td>一週間の活動ログを集約</td><td><code>~/.local/logs/weekly-reports/</code></td></tr>
+  <tr><td><b>X DM下書き生成</b></td><td>launchd</td><td>毎朝 08:30</td><td>未返信DM検出→Claude下書き→<code>#ai-承認待ち</code>にスレ投稿</td><td><code>x_dm_assistant/logs/</code></td></tr>
+  <tr><td colspan="5" style="color:var(--muted);font-size:12px;padding:7px 4px">※上記6本に加え、承認補完・記録系の常駐ジョブを含めローカル launchd は計11本。クラウド系は下表。</td></tr>
+</table>
+</div>
+
+<h3><span class="grouptitle g-on">🟢 秘書AI — クラウドcron（claude.ai トリガー 3本）＋ 週次・入金・GAS</span></h3>
+<div class="card" style="padding:8px 14px">
+<table>
+  <tr><th style="width:18%">名前</th><th style="width:12%">種別</th><th style="width:16%">時刻(JST)</th><th style="width:32%">やること</th><th style="width:22%">確認場所</th></tr>
+  <tr><td><b>承認監視</b></td><td>クラウドcron</td><td>平日 9/12/15/18/21時</td><td>夜レポ・承認待ちへの宮さん返信を拾い OK/NG/修正/指示を実行。<b>朝9時は前夜レポへの返信を最優先で処理</b></td><td>Slack <code>#ai-日報</code>/<code>#ai-承認待ち</code></td></tr>
+  <tr><td><b>統合夜レポート</b> <span class="badge b-red">最重要</span></td><td>クラウドcron</td><td>平日 19:00</td><td>6本部の動き・KPI・承認待ち・CS留保・期限アラート・翌日やること を1本に集約。Gmailラベル・Drive健康チェックも実行</td><td>Slack <code>#ai-日報</code>＋<code>#ai-承認待ち</code></td></tr>
+  <tr><td><b>MTG議事録→Trello</b></td><td>クラウドcron</td><td>月・木 12:00</td><td><code>#mtg議事録</code>を取得→動詞ベースでタスク抽出（担当・期限付き）→登録</td><td>Trello「タスク管理」To do</td></tr>
+  <tr><td><b>入金確認(SBI↔Shopify)</b></td><td>クラウドcron</td><td>平日 10:20</td><td>SBI入金履歴を読む→Shopify未入金注文と氏名＋金額で突合→🟢高確度=自動入金済化／🟡中低=承認待ち／⚠未マッチ=台帳登録</td><td>Slack <code>#入金確認用</code>＋入金不明者シート</td></tr>
+  <tr><td><b>週次売上レポート</b></td><td>クラウドcron</td><td>月 09:00</td><td>Shopify週次売上を集計→Googleドキュメント→Slackへ投稿</td><td>Slack <code>#mtg議事録</code>＋Doc</td></tr>
+  <tr><td><b>Drive日次整理</b></td><td>GAS(Google上)</td><td>毎日 深夜2〜3時</td><td>Driveルート直下の新規ファイルを種別判定→01_商品〜99_アーカイブへ振り分け</td><td>Drive「00_自動整理ログ」</td></tr>
+</table>
+</div>
+
+<h3><span class="grouptitle g-dev">🟣 商品開発AI — 新設（4本のcron / 統合台帳ベース）</span></h3>
+<div class="card" style="padding:8px 14px">
+<table>
+  <tr><th style="width:18%">名前</th><th style="width:14%">種別</th><th style="width:14%">時刻(JST)</th><th style="width:32%">やること</th><th style="width:22%">確認場所</th></tr>
+  <tr><td><b>A. 商品開発リサーチ</b></td><td>クラウドcron / X API</td><td>平日 朝（日次）</td><td>会社が記入した<b>「0-2_情報収集設定」</b>の競合X・界隈・KWだけを巡回（AIは推測しない）→市場シグナルを蓄積</td><td>台帳 <b>5_市場シグナルログ</b></td></tr>
+  <tr><td><b>(競合ウォッチ)</b></td><td>Aに付随</td><td>平日 朝（日次）</td><td>競合の新製品（社名/商品名/価格/内容量/単価mg/推定月販等）を観測ログ化</td><td>台帳 <b>6_競合商品ウォッチ</b></td></tr>
+  <tr><td><b>B. 週次 商品候補提案</b></td><td>クラウドcron</td><td>月曜 午前</td><td>シグナル＋競合＋販売実績＋成分マスタを読み候補2〜3件生成。<b>15項目フル記入必須</b>＋過去ボツ/既存重複の自動チェック＋市場フィット採点(6.0未満は自動却下)</td><td>Slack <b>開発専用承認</b>→承認後 台帳 4_候補</td></tr>
+  <tr><td><b>C. マーケ市場調査</b></td><td>クラウドcron</td><td>平日 朝（日次）</td><td>売れ筋・失速商品の売り方仮説（訴求/チャネル/セグメント）を更新</td><td>台帳 7_マーケ仮説KPI</td></tr>
+  <tr><td><b>D. 週次 マーケ仮説×KPI</b></td><td>クラウドcron</td><td>月曜 午前</td><td>候補と対で 商品×訴求×目標数値(CV/売上/CAC) の仮説を3件起案</td><td>Slack承認→承認後 台帳 7</td></tr>
+</table>
+<div class="note">観測ログ（5_シグナル・6_競合）は自動追記OK。提案（4_候補・7_仮説）は<b>社長承認の関所</b>を通るまで台帳に書かない。</div>
+</div>
+
+<!-- ③ 1日のタイムライン -->
+<h2>③ 1日のタイムライン（平日）</h2>
+<div class="card timeline">
+  <div class="tl-track">
+    <div class="tl-slot"><div class="tl-time">常時</div><div class="tl-ev tl-on">活動ログ 2分おき</div></div>
+    <div class="tl-slot"><div class="tl-time">02:00</div><div class="tl-ev tl-on">Drive整理(GAS)</div></div>
+    <div class="tl-slot"><div class="tl-time">朝</div><div class="tl-ev tl-dev">商品開発リサーチ A/C</div></div>
+    <div class="tl-slot"><div class="tl-time">08:30</div><div class="tl-ev tl-on">X DM下書き</div></div>
+    <div class="tl-slot"><div class="tl-time">09:00</div><div class="tl-ev tl-key">承認監視 朝（前夜レポへのMiy返信を即実行＝朝の業務）</div></div>
+    <div class="tl-slot"><div class="tl-time">10:20</div><div class="tl-ev tl-on">入金確認</div></div>
+    <div class="tl-slot"><div class="tl-time">10:30</div><div class="tl-ev tl-on">Slack→Trello</div></div>
+    <div class="tl-slot"><div class="tl-time">10:33</div><div class="tl-ev tl-on">物件リストアップ</div></div>
+    <div class="tl-slot"><div class="tl-time">12:00</div><div class="tl-ev tl-on">承認監視 昼</div><div class="tl-ev tl-on">議事録→Trello(月木)</div></div>
+    <div class="tl-slot"><div class="tl-time">15:00</div><div class="tl-ev tl-on">承認監視 昼</div></div>
+    <div class="tl-slot"><div class="tl-time">18:00</div><div class="tl-ev tl-on">承認監視 夕</div><div class="tl-ev tl-on">日報生成</div></div>
+    <div class="tl-slot"><div class="tl-time">19:00</div><div class="tl-ev tl-key">★統合夜レポート（最重要）</div></div>
+    <div class="tl-slot"><div class="tl-time">21:00</div><div class="tl-ev tl-on">承認監視 夜（最終）</div></div>
+  </div>
+  <div class="note">★<b>朝9時の承認監視</b>＝前夜の統合夜レポートへの宮さんのスレ返信を拾って実行する「1日の起点」。
+  週次は <b>月09:00 売上レポート</b>／<b>商品候補提案 B・D（月曜午前）</b>／<b>議事録→Trello（月木12:00）</b>。
+  紫=商品開発AI。</div>
+</div>
+
+<!-- ④ 商品開発AIエージェント -->
+<h2>④ 商品開発AIエージェント（新設・別系統）</h2>
+
+<div class="card" style="margin-bottom:14px">
+  <b style="color:var(--purple)">データ基盤＝統合台帳_v2（13タブ）</b>
+  <div class="note" style="margin-top:6px">
+  成分マスタ・販売実績・候補プール・シグナル・競合・マーケ仮説・ボツ案などを1つのスプレッドシートに集約。
+  <b>販売実績マスタにはShopify実売を反映済み</b>（直近月商・売れ筋順位入り）。
+  </div>
+  <div style="margin-top:10px">
+    <span class="tag">0-1 設定</span><span class="tag">0-2 情報収集設定（会社が記入）</span><span class="tag">1 成分マスタ</span>
+    <span class="tag">4 候補プール（提案）</span><span class="tag">5 市場シグナルログ</span><span class="tag">6 競合商品ウォッチ</span>
+    <span class="tag">7 マーケ仮説KPI</span><span class="tag">9 販売実績マスタ（実売反映）</span><span class="tag">10 ボツ案</span>
+    <span class="tag">…ほか計13タブ</span>
+  </div>
+  <div class="note" style="margin-top:8px">売れ筋実績（直近30日）: VOLCANO 2.0 ¥1,008,000(1位) / BLACK HOLE ¥792,000(2位) / THA REAL SNOOP OG ¥720,000(3位) / XTC ¥630,000(4位) … ＝候補提案の根拠データ。</div>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <b>情報収集は「AIが推測しない」設計</b>
+  <div class="note" style="margin-top:6px">
+  会社（社長/マーケ/開発2名）が統合台帳の新タブ <b>「0-2_情報収集設定」</b> に
+  <b>監視する競合・Xアカウント/界隈・検索キーワード</b> を記入 → AIはそこに書かれた対象<b>だけ</b>を毎日巡回（cron A・X API）。
+  記入が増えるほど提案精度が上がる。空欄時は規制監視のみの最小フォールバックで動く。
+  </div>
+</div>
+
+<h3>データの流れ（生成 → 関所 → 書込 → 逆フィードバック）</h3>
+<div class="card">
+<div class="devflow">
+  <div class="dfrow">
+    <div class="dfbox sig"><div class="h">① 情報収集（自動）</div>0-2設定の競合X/界隈/KWを巡回 → <b>5_シグナル</b>・<b>6_競合</b>へ自動追記（観測ログ）</div>
+    <div class="dfarr">→</div>
+    <div class="dfbox data"><div class="h">② 候補生成（週次・月曜）</div>シグナル＋競合＋<b>9_販売実績</b>＋<b>1_成分マスタ</b>を読み、新商品候補を2〜3件。15項目必須＋過去ボツ/既存重複の自動チェック＋市場フィット採点</div>
+  </div>
+  <div class="dfdown">↓</div>
+  <div class="dfrow">
+    <div class="dfbox gate"><div class="h">③ 関所＝社長承認</div>候補（4）・マーケ仮説（7）は<b>台帳に書かず</b>まずSlackで提示。<b>承認後のみ</b>台帳へ追記</div>
+    <div class="dfarr">→</div>
+    <div class="dfbox"><div class="h">④ 書込・商品化</div>承認分を 4_候補 / 7_仮説 へ記入 → 制作物テンプレ（商品情報/Shopify説明/X/価格物流 等）→ 発売</div>
+  </div>
+  <div class="dfdown">↻ 逆フィードバック</div>
+  <div class="dfrow">
+    <div class="dfbox data"><div class="h">⑤ 発売 → 売上 → 成分マスタへ逆FB</div>発売後の実売（9_販売実績の直近月商・売れ筋順位）を <b>1_成分マスタ</b> の評価へ還元 → 次の候補生成の精度が上がる学習ループ</div>
+    <div class="dfarr">←</div>
+    <div class="dfbox sig"><div class="h">継続観測</div>シグナル/競合は毎日更新され、夜レポートで重要度A（規制・大型競合・需要急増）を先頭表示</div>
+  </div>
+</div>
+</div>
+
+<!-- ⑤ 承認の住み分け -->
+<h2>⑤ 承認の住み分け（混同しないために）</h2>
+<div class="splitbox">
+  <div class="b sec">
+    <div class="t">🟢 秘書AIの承認 ＝ <code>#ai-承認待ち</code></div>
+    <ul>
+      <li>夜レポート・タスク・入金確認・CS下書き・X DM 等、<b>日常業務</b>の判断</li>
+      <li>宮さんが <b>OK / NG / 修正</b> をスレ返信 → 平日9/12/15/18/21時の承認監視が拾って実行</li>
+      <li>窓口は <code>#ai-承認待ち</code>（C0ATPFSLM4M）／日次まとめは <code>#ai-日報</code></li>
+    </ul>
+  </div>
+  <div class="b dev">
+    <div class="t">🟣 商品開発の承認 ＝ 台帳・開発専用</div>
+    <ul>
+      <li>新商品候補（4）・マーケ仮説（7）の採否は<b>開発専用の承認動線</b>で扱う</li>
+      <li><b>秘書の <code>#ai-承認待ち</code> には入れない</b>（業務承認と混ざらないよう分離）</li>
+      <li>承認されたものだけが <b>台帳シート4 提案中</b> へ書き込まれる＝関所</li>
+    </ul>
+  </div>
+</div>
+<div class="note" style="margin-top:8px">理由: 商品開発は判断の質・回数が日常承認と異なるため、専用の場で集中して判断できるよう動線を分けている。</div>
+
+<!-- フッタ -->
+<div class="card" style="margin-top:24px">
+  <b>このダッシュボードについて</b>
+  <div class="note" style="margin-top:6px">
+  ・<b>経営者（非エンジニア）向けの全体像です。</b>技術詳細の正本は <code>AI秘書_自動化システム一覧.md</code>、商品開発の運用正本は <code>商品本部/00_RUNBOOK.md</code><br>
+  ・既存の <a href="AI秘書全体ダッシュボード.html">AI秘書全体ダッシュボード.html</a> は削除していません（業務視点の従来版）。<br>
+  ・<b style="color:var(--purple)">本ファイル（KO_AI業務自動化_全体像.html）が最新です。</b>秘書AI＋新設の商品開発AIを1枚に統合した最新版。<br>
+  ・最終更新 <b>2026-05-26</b>
+  </div>
+</div>
+
+</body>
+</html>

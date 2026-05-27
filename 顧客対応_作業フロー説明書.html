@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>顧客対応 作業フロー説明書</title>
+<style>
+  :root{--bg:#ffffff;--panel:#f6f7f9;--panel2:#eef0f3;--line:#d6dae1;--text:#1c2330;--muted:#5b6473;
+    --accent:#e63946;--green:#1f9d57;--amber:#b07d00;--blue:#2b6cb0;--red:#c0392b;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--text);padding:28px;line-height:1.7}
+  h1{font-size:24px} h2{font-size:17px;margin:28px 0 12px;color:#111;border-left:4px solid var(--accent);padding-left:10px}
+  .sub{color:var(--muted);font-size:13px;margin-top:4px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+  .tag{display:inline-block;background:var(--blue);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+  .ba{display:flex;gap:14px;flex-wrap:wrap}
+  .ba>div{flex:1;min-width:240px;border-radius:12px;padding:16px}
+  .before{background:#fdf0f0;border:1px solid #f0c9c9}
+  .after{background:#eef9f1;border:1px solid #bce4c8}
+  .ba h3{font-size:14px;margin-bottom:8px} .ba ul{margin-left:18px;font-size:13px;color:#333}
+  .tl{display:flex;flex-direction:column}
+  .tl .row{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .tl .t{flex:0 0 76px;font-weight:700;color:var(--amber)}
+  .tl .who{flex:0 0 64px;font-size:12px}
+  .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;color:#fff}
+  .b-ai{background:var(--blue)}.b-you{background:var(--green)}
+  .tl .d{flex:1;font-size:14px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-size:12px}
+  .flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .step{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;flex:1;min-width:120px}
+  .arrow{color:var(--accent);font-weight:700;font-size:20px}
+  .crit{background:#fdecec;border:1px solid #f0c2c2;border-radius:12px;padding:14px;font-size:14px}
+  @media print{body{padding:0}.card{break-inside:avoid}}
+</style></head>
+<body>
+<header>
+  <h1>🎧 顧客対応 作業フロー説明書（担当者向け）</h1>
+  <div class="sub">Knockout ONLINE ／ 担当AI：<span class="tag">CS秘書AI</span>（自動：cs_daily＋cs_weekly）・2026-05-21</div>
+</header>
+
+<h2>① このAIは何をしてくれる？</h2>
+<div class="card">
+  <div class="flow">
+    <div class="step">📥 <b>収集</b><br><span class="sub">X(DM・メンション)＋メール(info@)の問い合わせを自動で集める</span></div>
+    <div class="arrow">→</div>
+    <div class="step">🧠 <b>振り分け</b><br><span class="sub">内容を理解して「答えられる／要確認」に分類</span></div>
+    <div class="arrow">→</div>
+    <div class="step">✍️ <b>下書き</b><br><span class="sub">答えられるものは返信案を作成</span></div>
+    <div class="arrow">→</div>
+    <div class="step">📚 <b>学習</b><br><span class="sub">新しい質問は対応後にマニュアルへ自動追加</span></div>
+  </div>
+  <p class="sub" style="margin-top:10px">⚠️ AIは<b>送信しません</b>。送るのは必ず担当者です。緊急（体調・苦情）は即エスカレします。</p>
+</div>
+
+<h2>② これまで → これから（何が変わる）</h2>
+<div class="ba">
+  <div class="before"><h3>❌ これまで（手動）</h3><ul>
+    <li>X・メールを自分で巡回して探す</li>
+    <li>毎回ゼロから返信文を考える</li>
+    <li>過去の対応を都度思い出す／探す</li>
+    <li>対応漏れ・返信遅れが起きやすい</li>
+  </ul></div>
+  <div class="after"><h3>✅ これから（AI支援）</h3><ul>
+    <li>AIが集めて1か所に整理</li>
+    <li>返信案が用意される（確認して送るだけ）</li>
+    <li>似た質問は過去ケースから自動回答</li>
+    <li>難しいものは #顧客対応 に🔴で届く</li>
+  </ul></div>
+</div>
+
+<h2>③ 担当者の1日の作業フロー（AIは10時・14時・18時に自動実行）</h2>
+<div class="card"><div class="tl">
+  <div class="row"><div class="t">10:00</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">新着を処理 → メールは<b>Gmailの下書き</b>、Xは<b>Slack #顧客対応</b>、答えられないものは <b>🔴確認必要</b>で #顧客対応 に質問</div></div>
+  <div class="row"><div class="t">随時</div><div class="who"><span class="badge b-you">担当</span></div><div class="d">①Gmailの下書きを確認して送信 ②#顧客対応 の🔴質問に<b>スレッドで回答</b> ③Xの返信案を確認してXから送信</div></div>
+  <div class="row"><div class="t">14:00</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">再処理。<b>10時に担当が答えた🔴質問は、ここで返信下書きになる</b>。新規対応はマニュアルに自動追加</div></div>
+  <div class="row"><div class="t">18:00</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">同様に処理（その日の最終）</div></div>
+  <div class="row"><div class="t">日曜20:00</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">1週間を集計し<b>再発防止策</b>つきレポート → Googleシート＋#ai-日報</div></div>
+</div></div>
+
+<h2>④ どこに何が届く？（迷ったらこの表）</h2>
+<div class="card"><table>
+  <tr><th>種類</th><th>届く場所</th><th>担当者の操作</th></tr>
+  <tr><td>メールの返信案</td><td><b>Gmailの「下書き」</b>(info@)</td><td>確認 → 送信</td></tr>
+  <tr><td>Xの返信案</td><td><b>Slack #顧客対応</b></td><td>確認 → Xアプリから送信</td></tr>
+  <tr><td>🔴 AIが答えられない質問</td><td><b>Slack #顧客対応</b></td><td>スレッドで回答（次回AIが下書き化）</td></tr>
+  <tr><td>週次まとめ・再発防止策</td><td>Googleシート＋#ai-日報</td><td>見て改善に活かす</td></tr>
+</table></div>
+
+<h2>⑤ 緊急時（最優先）</h2>
+<div class="crit">🚨 「体調が悪い」「副反応」「苦情」を含む問い合わせは、AIが <b>即エスカレ</b>します。見つけたら<b>最優先</b>で対応してください。</div>
+
+<p class="sub" style="margin-top:20px">詳しい仕組み：Notion「顧客対応AI 自動化マニュアル」／ 全体像：AIエージェント秘書 全体説明.html</p>
+</body></html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIエージェント秘書 全体説明</title>
+<style>
+  :root{--bg:#0f1115;--panel:#171a21;--panel2:#1e222b;--line:#2a2f3a;--text:#e8eaed;--muted:#9aa3b2;
+    --accent:#e63946;--green:#2ecc71;--blue:#4d9fff;--gray:#6b7280;--amber:#f1c40f;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--text);padding:28px;line-height:1.6}
+  h1{font-size:24px} h2{font-size:17px;margin:28px 0 12px;color:#fff;border-left:4px solid var(--accent);padding-left:10px}
+  .sub{color:var(--muted);font-size:13px;margin-top:4px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+  .kpis{display:flex;gap:12px;flex-wrap:wrap}
+  .kpi{flex:1;min-width:130px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .kpi .num{font-size:30px;font-weight:700}.kpi .lbl{color:var(--muted);font-size:12px}
+  .dept{margin-bottom:14px}
+  .dept .head{font-weight:700;font-size:14px;color:#fff;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:inline-block;margin-bottom:8px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 11px;min-width:175px}
+  .chip .n{font-weight:700;font-size:13px}.chip .r{color:var(--muted);font-size:11px;margin-top:2px}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+  .on{background:var(--green)}.def{background:var(--blue)}
+  .legend{font-size:12px;color:var(--muted);margin:6px 0 14px}
+  .legend span{margin-right:16px}
+  .src{display:flex;gap:8px;flex-wrap:wrap;font-size:12px}
+  .src .s{border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+  .ok{color:var(--green)}.ng{color:var(--accent)}
+  .note{background:#16291c;border:1px solid #2a5b38;border-radius:10px;padding:12px;font-size:13px;margin-top:8px}
+</style></head>
+<body>
+<header>
+  <h1>🤖 AIエージェント秘書 全体説明</h1>
+  <div class="sub">Knockout / Circle ・ ノックアウト本部「秘書AIチーム」全体図（計28体制） ・ 2026-05-21</div>
+</header>
+
+<h2>① 全体サマリ</h2>
+<div class="kpis">
+  <div class="kpi"><div class="num">28</div><div class="lbl">秘書AI（定義済・7本部）</div></div>
+  <div class="kpi"><div class="num" style="color:var(--green)">5</div><div class="lbl">稼働開始済（統括/経理/EC/CS/商品開発）</div></div>
+  <div class="kpi"><div class="num" style="color:var(--blue)">23</div><div class="lbl">定義済み・順次稼働</div></div>
+  <div class="kpi"><div class="num" style="color:var(--amber)">1</div><div class="lbl">技術自動化まで完成（CS秘書AI）</div></div>
+</div>
+<div class="legend"><span><span class="dot on"></span>稼働開始済</span><span><span class="dot def"></span>定義済み（ペルソナあり・順次稼働）</span></div>
+<div class="sub">共通ルール：日報は <b>#ai-日報</b> に自動投稿／迷ったら <b>#ai-承認待ち</b> で人間にエスカレ／緊急は会社憲法のエスカレ基準／生データは外部に出さず、まとめ・分析のみ共有。</div>
+
+<h2>② 本部別 秘書AI 一覧（全28）</h2>
+
+<div class="card">
+  <div class="dept"><div class="head">🏛 本社</div><div class="chips">
+    <div class="chip"><div class="n"><span class="dot on"></span>🎯 統括秘書AI</div><div class="r">朝晩の全社通知・KPIサマリ</div></div>
+  </div></div>
+
+  <div class="dept"><div class="head">🧪 商品本部</div><div class="chips">
+    <div class="chip"><div class="n"><span class="dot on"></span>商品開発秘書AI</div><div class="r">試作管理・COA管理</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>製造秘書AI</div><div class="r">製造工程の管理</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>品質保証秘書AI</div><div class="r">品質保証・検査</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>調達秘書AI</div><div class="r">原料・資材の調達</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>食品衛生秘書AI</div><div class="r">食品衛生管理</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>薬事秘書AI</div><div class="r">薬機法・表示チェック</div></div>
+  </div></div>
+
+  <div class="dept"><div class="head">🛒 販売本部</div><div class="chips">
+    <div class="chip"><div class="n"><span class="dot on"></span>🛒 EC運営秘書AI</div><div class="r">Shopify受注集計・商品ページ管理</div></div>
+    <div class="chip" style="border-color:var(--green)"><div class="n"><span class="dot on"></span>🗣 CS秘書AI ★</div><div class="r">問い合わせ一次対応・FAQ更新（自動化完成）</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>マーケ秘書AI</div><div class="r">SNS・販促・反応分析</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>CRM秘書AI</div><div class="r">顧客関係・リピート施策</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>卸営業秘書AI</div><div class="r">卸先対応・営業</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>FC本部秘書AI</div><div class="r">フランチャイズ展開</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>自社店舗秘書AI</div><div class="r">店舗運営サポート</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>店舗開発秘書AI</div><div class="r">出店・物件開発</div></div>
+  </div></div>
+
+  <div class="dept"><div class="head">🚚 流通本部</div><div class="chips">
+    <div class="chip"><div class="n"><span class="dot def"></span>物流秘書AI</div><div class="r">発送・配送・在庫物流</div></div>
+  </div></div>
+
+  <div class="dept"><div class="head">💼 管理本部</div><div class="chips">
+    <div class="chip"><div class="n"><span class="dot on"></span>💰 経理秘書AI</div><div class="r">請求書・入金確認・月次集計</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>法務秘書AI</div><div class="r">契約・法務確認</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>コンプラ秘書AI</div><div class="r">コンプライアンス</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>情報管理秘書AI</div><div class="r">情報・データ管理</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>内部統制秘書AI</div><div class="r">内部統制・監査</div></div>
+  </div></div>
+
+  <div class="dept"><div class="head">🧑‍💼 人事本部</div><div class="chips">
+    <div class="chip"><div class="n"><span class="dot def"></span>採用秘書AI</div><div class="r">採用・募集</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>労務秘書AI</div><div class="r">労務・勤怠</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>教育秘書AI</div><div class="r">研修・教育</div></div>
+  </div></div>
+
+  <div class="dept"><div class="head">🚨 危機管理本部</div><div class="chips">
+    <div class="chip"><div class="n"><span class="dot def"></span>健康被害対応AI</div><div class="r">健康被害の初動対応</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>回収・停止AI</div><div class="r">リコール・販売停止</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>炎上対応AI</div><div class="r">SNS炎上の検知・対応</div></div>
+    <div class="chip"><div class="n"><span class="dot def"></span>行政対応AI</div><div class="r">行政・当局対応</div></div>
+  </div></div>
+</div>
+
+<h2>③ いま技術的に動いている自動処理（launchd / Remote cron）</h2>
+<div class="card"><div class="sub" style="margin-bottom:8px">秘書AIの一部は、PC上の自動処理として実稼働中です：</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr style="color:var(--muted)"><td style="padding:6px">🗣 CS秘書AI</td><td>毎日10/14/18時＋日曜20時</td><td>顧客対応の下書き・集計（cs_daily/cs_weekly）</td></tr>
+    <tr style="color:var(--muted)"><td style="padding:6px">🎯 統括秘書AI</td><td>平日19時＋9/12/15/18/21時</td><td>夜の統合レポート・承認監視</td></tr>
+    <tr style="color:var(--muted)"><td style="padding:6px">📝 記録系</td><td>2分おき/18時/金18:30</td><td>活動ログ・PC日報・週次まとめ</td></tr>
+    <tr style="color:var(--muted)"><td style="padding:6px">📋 タスク化</td><td>毎朝10:30/月木12時</td><td>Slack・議事録→Trello</td></tr>
+    <tr style="color:var(--muted)"><td style="padding:6px">🏠 物件/書類</td><td>平日10:33/深夜2時</td><td>物件レーダー・Drive自動整理</td></tr>
+  </table>
+</div>
+
+<h2>④ データソース接続状況</h2>
+<div class="card"><div class="src">
+  <div class="s ok">✅ Google Drive</div><div class="s ok">✅ Notion</div><div class="s ok">✅ Slack</div>
+  <div class="s ok">✅ Trello</div><div class="s ok">✅ Dropbox</div><div class="s ok">✅ Gmail</div>
+  <div class="s ok">✅ X(API)</div><div class="s ok">✅ Anthropic</div>
+  <div class="s ng">✖ Shopify（要連携）</div><div class="s ng">✖ Square（要連携）</div>
+</div></div>
+
+<div class="note">★ <b>顧客対応（CS秘書AI）</b>が現在もっとも自動化が進んでおり、X・メールの一次対応〜再発防止〜マニュアル自動更新まで稼働中。詳細は別紙「顧客対応 作業フロー説明書」。最終的に20名+体制を目指し、各本部の秘書AIを順次稼働させます。</div>
+</body></html>

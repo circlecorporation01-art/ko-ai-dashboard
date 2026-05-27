@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI秘書・AIエージェント 全体マップ | Knockout</title>
+<style>
+  :root{
+    --bg:#0e1014; --panel:#171a21; --panel2:#1e222b; --panel3:#232834; --line:#2a2f3a;
+    --text:#e8eaed; --muted:#9aa3b2; --accent:#e63946;
+    --green:#2ecc71; --amber:#f1c40f; --blue:#4d9fff; --orange:#ff8c42; --gray:#6b7280; --red:#ff5b6e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+       background:var(--bg);color:var(--text);padding:28px 26px 60px;line-height:1.6;max-width:1300px;margin:0 auto}
+  h1{font-size:25px;letter-spacing:.02em}
+  h2{font-size:17px;margin:38px 0 16px;color:#fff;border-left:4px solid var(--accent);padding-left:11px}
+  h3{font-size:14px;color:var(--muted);margin:18px 0 8px;font-weight:600}
+  .sub{color:var(--muted);font-size:13px;margin-top:5px}
+  .grid{display:grid;gap:16px}
+  .kpis{grid-template-columns:repeat(5,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .kpi .num{font-size:36px;font-weight:800;line-height:1}
+  .kpi .lbl{color:var(--muted);font-size:12.5px;margin-top:8px}
+  .bar{height:8px;background:var(--panel2);border-radius:6px;margin-top:8px;overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:6px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;color:#0b0d10;white-space:nowrap}
+  .b-green{background:var(--green)} .b-amber{background:var(--amber)} .b-blue{background:var(--blue);color:#fff}
+  .b-orange{background:var(--orange);color:#0b0d10} .b-gray{background:var(--gray);color:#fff} .b-red{background:var(--red);color:#fff}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:10px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px}
+  td b{color:#fff}
+  .role{color:var(--muted);font-size:12px}
+  .pbar{width:110px;display:inline-block;vertical-align:middle}
+  .legend{font-size:12.5px;color:var(--muted);margin-top:12px;display:flex;flex-wrap:wrap;gap:16px}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{background:var(--panel3);padding:1px 6px;border-radius:5px;font-size:12px;color:#cdd5e0}
+
+  .ok{background:#10261a;border:1px solid #1d5b34;border-radius:14px;padding:16px 18px}
+  .ok .at{color:var(--green);font-weight:800;font-size:14px;margin-bottom:8px}
+  .ok ul{margin:0 0 0 18px} .ok li{margin:6px 0;font-size:13px}
+
+  .map{display:grid;grid-template-columns:1fr;gap:14px}
+  .layer{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;position:relative}
+  .layer .ltitle{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em;margin-bottom:10px;text-transform:uppercase}
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12.5px;display:flex;align-items:center;gap:7px}
+  .chip .ic{font-size:15px}
+  .chip.on{border-color:#1d5b34;background:#10261a}
+  .chip.boss{border-color:#5b1d28;background:#2a1418;font-weight:700}
+  .flowarrow{text-align:center;color:var(--accent);font-size:20px;margin:-4px 0;font-weight:700}
+  .maprow{display:grid;grid-template-columns:1fr 38px 1fr 38px 1fr;align-items:center;gap:0}
+  .maprow .arr{text-align:center;color:#5a6378;font-size:22px}
+
+  .timeline{position:relative;padding:8px 0 4px;overflow-x:auto}
+  .tl-track{display:flex;gap:0;min-width:1040px;position:relative}
+  .tl-slot{flex:1;border-left:1px solid var(--line);padding:0 6px 8px;position:relative;min-width:72px}
+  .tl-time{font-size:11px;color:var(--muted);font-weight:700;padding:4px 0}
+  .tl-ev{font-size:11px;border-radius:7px;padding:5px 7px;margin-top:5px;line-height:1.35}
+  .tl-on{background:#10261a;border:1px solid #1d5b34;color:#cde7d6}
+  .tl-key{background:#2a1418;border:1px solid #5b1d28;color:#ffd2d7}
+
+  .grouptitle{font-weight:700;font-size:13px;margin:4px 0;padding:7px 11px;border-radius:9px;display:inline-block}
+  .g-on{background:#10331f;color:#7ee7a6;border:1px solid #1d5b34}
+  .g-soft{background:#10204a;color:#a8c6ff;border:1px solid #2c4185}
+  .g-todo{background:#33200f;color:#ffb27a;border:1px solid #5b3a1d}
+  .g-off{background:#23262e;color:#9aa3b2;border:1px solid var(--line)}
+
+  .road{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .road .card .n{color:var(--accent);font-weight:700;font-size:13px;margin-bottom:4px}
+  .note{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .flowmini{font-size:12px;color:#bcc6d6;background:var(--panel2);border-radius:8px;padding:7px 10px;margin-top:4px}
+  .flowmini b{color:#fff}
+  @media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}.road{grid-template-columns:1fr 1fr}.maprow{grid-template-columns:1fr;gap:6px}.maprow .arr{transform:rotate(90deg)}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🤖 AI秘書・AIエージェント 全体マップ</h1>
+  <div class="sub"><b>どのAIが・どの仕事を・いつ・どう報告するか</b> を構築者以外でも一目で ・ Knockout ONLINE / Circle株式会社<br>
+  最終更新 2026-05-22 ・ <b style="color:var(--green)">全スケジュールを実機検証済</b>（ローカル launchd + クラウド claude.ai トリガー20本 + crontab を直接確認）</div>
+</header>
+
+<div class="legend">
+  <span>🟢 <b style="color:var(--green)">稼働中</b></span>
+  <span>🔵 <b style="color:var(--blue)">月曜から稼働</b></span>
+  <span>🟡 <b style="color:var(--amber)">統合中</b></span>
+  <span>🟠 <b style="color:var(--orange)">未自動化</b>（手動）</span>
+  <span>⚪ <b style="color:var(--gray)">対象外</b></span>
+</div>
+
+<!-- 解消済みアラート -->
+<h2>✅ 実機確認で見つけた2件の停止 → 対応済み（5/22）</h2>
+<div class="ok">
+  <div class="at">資料では「稼働中」だが実際は止まっていた2件を、確認のうえ復旧しました。</div>
+  <ul>
+    <li><b>① MTG議事録→Trello を再有効化</b> — クラウドトリガー <code>trig_01Pk8E…</code> が5/14以降 無効だった → <b>enabled:true に復旧。次回 5/25(月) 12:08 から自動再開</b>。</li>
+    <li><b>② 入金確認(payment-matcher) を production 起動</b> — 未スケジュールだった → ローカル launchd に本番でロード（<code>RunAtLoad=false</code>＝即時実行なし）。<b>次回 5/25(月) 10:20 から平日自動実行</b>。</li>
+  </ul>
+</div>
+
+<!-- KPI -->
+<h2>① 全体サマリ</h2>
+<div class="grid kpis">
+  <div class="card kpi">
+    <div class="num" style="color:var(--green)">18</div>
+    <div class="lbl">稼働中（Mac 14 ＋ クラウド 3 ＋ Google 1）</div>
+  </div>
+  <div class="card kpi">
+    <div class="num" style="color:var(--blue)">2</div>
+    <div class="lbl">月曜(5/25)から始動<br>（入金確認 / 議事録→Trello）</div>
+  </div>
+  <div class="card kpi">
+    <div class="num" style="color:var(--amber)">1</div>
+    <div class="lbl">統合中<br>（X DM下書き→日次フローへ）</div>
+  </div>
+  <div class="card kpi">
+    <div class="num" style="color:var(--orange)">4</div>
+    <div class="lbl">これから自動化したい業務</div>
+  </div>
+  <div class="card kpi">
+    <div class="num" style="color:var(--green)">69<span style="font-size:18px">%</span></div>
+    <div class="lbl">業務カバー率（13領域中9自動化済）<div class="bar"><i style="width:69%;background:var(--green)"></i></div></div>
+  </div>
+</div>
+
+<!-- ===== 全体マップ ===== -->
+<h2>② 全体マップ（情報の流れ）</h2>
+<div class="card" style="padding:20px">
+<div class="maprow">
+  <div class="layer" style="margin:0">
+    <div class="ltitle">📥 情報の入り口</div>
+    <div class="chips" style="flex-direction:column;align-items:stretch">
+      <div class="chip"><span class="ic">💬</span>Slack（依頼・議事録・入金通知）</div>
+      <div class="chip"><span class="ic">✉️</span>Gmail（顧客・行政・採用・請求）</div>
+      <div class="chip"><span class="ic">𝕏</span>X（DM・メンション）</div>
+      <div class="chip"><span class="ic">🏦</span>銀行API（SBI 入金履歴）</div>
+      <div class="chip"><span class="ic">🌐</span>不動産サイト × 5</div>
+      <div class="chip"><span class="ic">🖥️</span>PC操作・閲覧履歴</div>
+    </div>
+  </div>
+  <div class="arr">→</div>
+  <div class="layer" style="margin:0">
+    <div class="ltitle">🤖 AIエージェントが処理</div>
+    <div class="chips" style="flex-direction:column;align-items:stretch">
+      <div class="chip on"><span class="ic">🟢</span>顧客対応AI（日次・週次・解決記録）</div>
+      <div class="chip on"><span class="ic">🟢</span>物件AI（探索＋問い合わせ）</div>
+      <div class="chip on"><span class="ic">🟢</span>タスク化AI（Slack→Trello・議事録→Trello）</div>
+      <div class="chip on"><span class="ic">🟢</span>統括AI（夜レポート・承認監視）</div>
+      <div class="chip on"><span class="ic">🟢</span>記録AI（日報・活動ログ）・書類整理</div>
+      <div class="chip on"><span class="ic">🔵</span>入金確認AI（月曜から稼働）</div>
+    </div>
+  </div>
+  <div class="arr">→</div>
+  <div class="layer" style="margin:0">
+    <div class="ltitle">📤 結果の届き先（報告）</div>
+    <div class="chips" style="flex-direction:column;align-items:stretch">
+      <div class="chip"><span class="ic">📊</span>Slack <code>#ai-日報</code>（夜レポート）</div>
+      <div class="chip"><span class="ic">✅</span>Slack <code>#ai-承認待ち</code>（要判断）</div>
+      <div class="chip"><span class="ic">💴</span>Slack <code>#入金確認用</code></div>
+      <div class="chip"><span class="ic">🗂️</span>Trello（タスク・物件カード）</div>
+      <div class="chip"><span class="ic">📈</span>Google スプレッドシート</div>
+      <div class="chip"><span class="ic">📚</span>Notion（マニュアル・台帳）</div>
+      <div class="chip"><span class="ic">📝</span>Gmail 下書き（送信は人）</div>
+    </div>
+  </div>
+</div>
+
+<div class="flowarrow" style="margin-top:14px">↓ 判断が要るものは Slack に上がってくる ↓</div>
+<div class="layer" style="margin-top:10px">
+  <div class="ltitle">👑 経営判断（宮さん）がやること</div>
+  <div class="chips">
+    <div class="chip boss"><span class="ic">📱</span>Slack <code>#ai-日報</code> を朝に読む</div>
+    <div class="chip boss"><span class="ic">💬</span><code>#ai-承認待ち</code> に <b>OK / NG / 修正</b> をスレ返信</div>
+    <div class="chip boss"><span class="ic">📤</span>下書きされたメール・DMを確認して送信</div>
+  </div>
+  <div class="note">→ 返信は平日 9/12/15/18/21時の「承認監視AI」が自動で拾って実行。<b>人が手を動かすのは確認と承認だけ。</b></div>
+</div>
+</div>
+
+<!-- ===== エージェント詳細一覧 ===== -->
+<h2>③ エージェント一覧（誰が・何を・いつ・どう報告）</h2>
+
+<h3><span class="grouptitle g-on">🟢 稼働中（実機確認済）</span></h3>
+<div class="card" style="padding:8px 14px">
+<table>
+  <tr>
+    <th style="width:15%">エージェント</th><th style="width:14%">担当業務</th>
+    <th style="width:11%">種別</th><th style="width:14%">スケジュール</th>
+    <th style="width:28%">手順（入力→処理→出力）</th><th style="width:18%">成果の報告先</th>
+  </tr>
+
+  <tr><td colspan="6" style="padding:7px 4px;color:var(--muted);font-weight:700;font-size:12px">━ 顧客対応 ━</td></tr>
+  <tr>
+    <td><b>顧客対応AI・日次</b><br><span class="role">cs-daily</span></td>
+    <td>問い合わせ返信</td><td>Mac (launchd)</td><td>毎日 10:00 / 14:00 / 18:00</td>
+    <td><div class="flowmini">X DM・メンション＋メール問い合わせを収集 → 過去48ケースの知識ベースを参照しClaudeが返信下書き → 難問はエスカレ</div></td>
+    <td>Gmail下書き／Slack <code>#顧客対応</code>。緊急は <code>#ai-承認待ち</code>＋DM。<b>送信は人</b></td>
+  </tr>
+  <tr>
+    <td><b>顧客対応AI・週次</b><br><span class="role">cs-weekly</span></td>
+    <td>CS週次集計・再発防止</td><td>Mac (launchd)</td><td>毎週 日曜 20:00</td>
+    <td><div class="flowmini">1週間の問い合わせを集計 → 分類・顧客の声・回答案・<b>再発防止策</b> → スプレッドシート3タブに蓄積</div></td>
+    <td>Google スプレッドシート＋Slack <code>#ai-日報</code></td>
+  </tr>
+  <tr>
+    <td><b>CS解決→Notion</b><br><span class="role">cs-resolve</span></td>
+    <td>新ケースのマニュアル化</td><td>Mac (launchd)</td><td><b>30分おき</b>に監視</td>
+    <td><div class="flowmini">担当者が回答→解決した新規ケースを検知 → 11項目で整形 → 知識ベースに追記（次回から自動回答に活用）</div></td>
+    <td>Notion「顧客対応マニュアルDB」</td>
+  </tr>
+
+  <tr><td colspan="6" style="padding:7px 4px;color:var(--muted);font-weight:700;font-size:12px">━ 物件 ━</td></tr>
+  <tr>
+    <td><b>物件レーダー</b><br><span class="role">property_radar</span></td>
+    <td>店舗物件探し</td><td>Mac (launchd)</td><td>平日 10:33</td>
+    <td><div class="flowmini">不動産5サイト（AtHome/Alterna/Goo/Inshokuten/TenantShop）巡回 → 条件で絞り込み → 新規物件をカード化</div></td>
+    <td>Trello「店舗物件候補」ボード</td>
+  </tr>
+  <tr>
+    <td><b>物件問い合わせ</b><br><span class="role">property_inquiry</span></td>
+    <td>物件問い合わせ補助</td><td>Mac (launchd)</td><td>平日 12:30 / 18:00</td>
+    <td><div class="flowmini">レーダーが拾った候補物件への問い合わせ作業を自動化（1日2回）</div></td>
+    <td>Trello／問い合わせログ</td>
+  </tr>
+
+  <tr><td colspan="6" style="padding:7px 4px;color:var(--muted);font-weight:700;font-size:12px">━ タスク化 ━</td></tr>
+  <tr>
+    <td><b>Slack→Trello</b><br><span class="role">slack-to-trello</span></td>
+    <td>タスク化</td><td>Mac (launchd)</td><td>毎日 11:30</td>
+    <td><div class="flowmini">特定のSlack投稿を検出 → タスクとしてカード化</div></td>
+    <td>Trello「タスク管理」ボード</td>
+  </tr>
+  <tr>
+    <td><b>議事録→Trello</b><br><span class="role">クラウド (5/22再開)</span></td>
+    <td>MTG決定の実行漏れ防止</td><td>クラウド (claude.ai)</td><td>月・木 12:00</td>
+    <td><div class="flowmini">月木10時MTG後、<code>#mtg議事録</code>を取得 → 動詞ベースでタスク抽出（担当・期限付き）→ 登録</div></td>
+    <td>Trello「タスク管理」To do＋件数をSlack報告</td>
+  </tr>
+
+  <tr><td colspan="6" style="padding:7px 4px;color:var(--muted);font-weight:700;font-size:12px">━ 統括・承認 ━</td></tr>
+  <tr>
+    <td><b>統合夜レポート</b><br><span class="role">クラウド ★最重要</span></td>
+    <td>全社まとめ・アラート</td><td>クラウド (claude.ai)</td><td>平日 19:00</td>
+    <td><div class="flowmini">6本部の動き・KPI・承認待ち・CS留保・期限アラート（請求/発注/法務/行政）・翌日やること を1本に集約。Gmail自動ラベル・Drive健康チェックも実行</div></td>
+    <td>Slack <code>#ai-日報</code>＋<code>#ai-承認待ち</code> に2投稿</td>
+  </tr>
+  <tr>
+    <td><b>承認監視AI</b><br><span class="role">クラウド</span></td>
+    <td>承認・指示の実行</td><td>クラウド (claude.ai)</td><td>平日 9/12/15/18/21時</td>
+    <td><div class="flowmini">夜レポート・承認待ちへの宮さんのスレ返信を拾う → OK/NG/修正/指示を実行（Trello更新・下書き作成 等）</div></td>
+    <td>Slack スレッド返信</td>
+  </tr>
+  <tr>
+    <td><b>Slack秘書（常駐）</b><br><span class="role">slack-secretary</span></td>
+    <td>その場の指示対応</td><td>Mac (常駐)</td><td>24時間 常駐</td>
+    <td><div class="flowmini">DM・メンションにその場で応答、軽い指示は即実行</div></td>
+    <td>Slack（DM・該当チャンネル）</td>
+  </tr>
+  <tr>
+    <td><b>承認ウォッチャー</b><br><span class="role">ai-approval-watcher</span></td>
+    <td>承認返信の取りこぼし防止</td><td>Mac (launchd)</td><td>5分おき</td>
+    <td><div class="flowmini">クラウド承認監視を補完。Slackの未処理返信を拾う</div></td>
+    <td>Slack スレッド返信</td>
+  </tr>
+  <tr>
+    <td><b>Trelloブリッジ</b><br><span class="role">trello-bridge</span></td>
+    <td>承認結果→Trello反映</td><td>Mac (launchd)</td><td>毎日 20:40</td>
+    <td><div class="flowmini">夜レポート後、承認・決定された事項をTrelloカードに橋渡し</div></td>
+    <td>Trello</td>
+  </tr>
+  <tr>
+    <td><b>夜レポ見張り番</b><br><span class="role">nightly-watchdog</span></td>
+    <td>沈黙事故の検知</td><td>Mac (launchd)</td><td>平日 19:35 / 20:30</td>
+    <td><div class="flowmini">夜レポートが <code>#ai-日報</code> に出ていなければ異常と判断 → 警報</div></td>
+    <td>宮さんへ Slack DM（1日1回）</td>
+  </tr>
+
+  <tr><td colspan="6" style="padding:7px 4px;color:var(--muted);font-weight:700;font-size:12px">━ 記録・書類 ━</td></tr>
+  <tr>
+    <td><b>活動ログ収集</b><br><span class="role">log-activity</span></td>
+    <td>日報の元データ</td><td>Mac (launchd)</td><td>2分おき 24h</td>
+    <td><div class="flowmini">PC操作・閲覧履歴・Slack・Trello投稿を集約</div></td>
+    <td><code>~/.local/logs/activity/</code></td>
+  </tr>
+  <tr>
+    <td><b>PC日報生成</b><br><span class="role">daily-report</span></td>
+    <td>日報</td><td>Mac (launchd)</td><td>毎日 18:00</td>
+    <td><div class="flowmini">当日のPC活動ログをMarkdown日報に集約</div></td>
+    <td><code>~/.local/logs/daily-reports/</code></td>
+  </tr>
+  <tr>
+    <td><b>週次まとめ</b><br><span class="role">weekly-rollup</span></td>
+    <td>週次集約</td><td>Mac (launchd)</td><td>金 18:30</td>
+    <td><div class="flowmini">1週間の活動ログを集約</div></td>
+    <td><code>~/.local/logs/weekly-reports/</code></td>
+  </tr>
+  <tr>
+    <td><b>Drive日次整理</b><br><span class="role">GAS（Google上）</span></td>
+    <td>書類の自動分類</td><td>Google (GASトリガー)</td><td>毎日 深夜2〜3時</td>
+    <td><div class="flowmini">Driveルート直下の新規ファイルを種別判定 → 01_商品〜99_アーカイブへ振り分け</div></td>
+    <td>Drive「00_自動整理ログ」シート</td>
+  </tr>
+</table>
+</div>
+
+<h3><span class="grouptitle g-soft">🔵 月曜(5/25)から始動・🟡 統合中</span></h3>
+<div class="card" style="padding:8px 14px">
+<table>
+  <tr><th style="width:15%">エージェント</th><th style="width:14%">担当業務</th><th style="width:11%">種別</th><th style="width:14%">スケジュール</th><th style="width:28%">手順・状況</th><th style="width:18%">報告先</th></tr>
+  <tr>
+    <td><b>入金確認AI</b> <span class="badge b-blue">月曜稼働</span><br><span class="role">payment-matcher</span></td>
+    <td>SBI入金↔Shopify突合</td><td>Mac (launchd・prod)</td><td>平日 10:20</td>
+    <td><div class="flowmini">銀行Botの入金履歴を読む → Shopify未入金注文と<b>金額＋氏名で突合</b> → 🟢高確度=自動で入金済化／🟡中低=承認待ち／⚠未マッチ=台帳登録。<b>検証14/17件(82%)・誤検知ゼロ確認済</b>。5/22ロード完了、次は5/25 10:20</div></td>
+    <td>Slack <code>#入金確認用</code>＋入金不明者シート</td>
+  </tr>
+  <tr>
+    <td><b>X DM下書き</b> <span class="badge b-amber">統合中</span><br><span class="role">x_dm_assistant</span></td>
+    <td>X DMの返信下書き</td><td>Mac (未ロード)</td><td>朝 8:30（旧）</td>
+    <td><div class="flowmini">役割が「顧客対応AI・日次」と重複 → 日次フローへ一本化中。単独では止めてOK（想定内）</div></td>
+    <td>（cs-daily の <code>#顧客対応</code> に統合）</td>
+  </tr>
+</table>
+</div>
+
+<!-- ===== 業務カバレッジ ===== -->
+<h2>④ 業務カバレッジ（どの業務がどこまで自動化されたか）</h2>
+<div class="card" style="padding:8px 14px">
+<table>
+  <tr><th style="width:24%">業務領域</th><th style="width:36%">担当エージェント</th><th style="width:16%">進捗</th><th>状態</th></tr>
+  <tr><td>顧客対応（CS）</td><td>日次 / 週次 / CS解決→Notion</td><td><div class="bar pbar"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>承認・統括</td><td>統合夜レポート / 承認監視 / Slack秘書 / 見張り番</td><td><div class="bar pbar"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>タスク化</td><td>Slack→Trello / 議事録→Trello</td><td><div class="bar pbar"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge b-green">稼働中</span> 5/22再開</td></tr>
+  <tr><td>日報・記録</td><td>活動ログ / PC日報 / 週次まとめ</td><td><div class="bar pbar"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>書類整理</td><td>Drive日次整理（GAS）</td><td><div class="bar pbar"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>物件探し（店舗/FC）</td><td>物件レーダー / 物件問い合わせ</td><td><div class="bar pbar"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>行政メール監視</td><td>統合夜レポート（Gmail自動ラベル）</td><td><div class="bar pbar"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>期限管理（請求/発注/法務）</td><td>統合夜レポート（アラート）</td><td><div class="bar pbar"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>入金確認</td><td>入金確認AI（payment-matcher）</td><td><div class="bar pbar"><i style="width:95%;background:var(--blue)"></i></div></td><td><span class="badge b-blue">月曜稼働</span> 5/25〜平日自動</td></tr>
+  <tr><td>EC・販促 KPI</td><td>統合夜レポート（取得は試行のみ）</td><td><div class="bar pbar"><i style="width:30%;background:var(--orange)"></i></div></td><td><span class="badge b-orange">手動</span> CSV自動DLが未実装</td></tr>
+  <tr><td>仕入れ・発注</td><td>日報で確認のみ</td><td><div class="bar pbar"><i style="width:20%;background:var(--orange)"></i></div></td><td><span class="badge b-orange">手動</span> 発注漏れリマインド未実装</td></tr>
+  <tr><td>マーケティング（X/IG）</td><td>商品開発×マーケ統合（計画書あり）</td><td><div class="bar pbar"><i style="width:20%;background:var(--orange)"></i></div></td><td><span class="badge b-orange">計画段階</span></td></tr>
+  <tr><td>危機管理（SNS炎上）</td><td>統合夜＋承認監視（検知は一部）</td><td><div class="bar pbar"><i style="width:40%;background:var(--orange)"></i></div></td><td><span class="badge b-orange">一部</span></td></tr>
+  <tr><td>商品開発</td><td>—</td><td><div class="bar pbar"><i style="width:0%"></i></div></td><td><span class="badge b-gray">対象外</span>（担当外）</td></tr>
+</table>
+</div>
+
+<!-- ===== タイムライン ===== -->
+<h2>⑤ 平日1日のタイムライン</h2>
+<div class="card timeline">
+  <div class="tl-track">
+    <div class="tl-slot"><div class="tl-time">常時</div><div class="tl-ev tl-on">活動ログ 2分おき</div><div class="tl-ev tl-on">Slack秘書 常駐</div><div class="tl-ev tl-on">承認W 5分おき</div><div class="tl-ev tl-on">CS解決 30分おき</div></div>
+    <div class="tl-slot"><div class="tl-time">02:00</div><div class="tl-ev tl-on">Drive整理（GAS）</div></div>
+    <div class="tl-slot"><div class="tl-time">09:00</div><div class="tl-ev tl-on">承認監視 朝</div></div>
+    <div class="tl-slot"><div class="tl-time">10:00</div><div class="tl-ev tl-on">顧客対応 日次①</div></div>
+    <div class="tl-slot"><div class="tl-time">10:20</div><div class="tl-ev tl-on">入金確認（月曜〜）</div></div>
+    <div class="tl-slot"><div class="tl-time">10:33</div><div class="tl-ev tl-on">物件レーダー</div></div>
+    <div class="tl-slot"><div class="tl-time">11:30</div><div class="tl-ev tl-on">Slack→Trello</div></div>
+    <div class="tl-slot"><div class="tl-time">12:00</div><div class="tl-ev tl-on">承認監視 昼</div><div class="tl-ev tl-on">議事録→Trello（月木）</div></div>
+    <div class="tl-slot"><div class="tl-time">12:30</div><div class="tl-ev tl-on">物件問い合わせ①</div></div>
+    <div class="tl-slot"><div class="tl-time">14:00</div><div class="tl-ev tl-on">顧客対応 日次②</div></div>
+    <div class="tl-slot"><div class="tl-time">15:00</div><div class="tl-ev tl-on">承認監視 昼</div></div>
+    <div class="tl-slot"><div class="tl-time">18:00</div><div class="tl-ev tl-on">承認監視 夕</div><div class="tl-ev tl-on">PC日報</div><div class="tl-ev tl-on">顧客対応 日次③</div><div class="tl-ev tl-on">物件問い合わせ②</div></div>
+    <div class="tl-slot"><div class="tl-time">19:00</div><div class="tl-ev tl-key">★統合夜レポート</div><div class="tl-ev tl-on">見張り19:35</div></div>
+    <div class="tl-slot"><div class="tl-time">20:30</div><div class="tl-ev tl-on">見張り番</div><div class="tl-ev tl-on">Trelloブリッジ20:40</div></div>
+    <div class="tl-slot"><div class="tl-time">21:00</div><div class="tl-ev tl-on">承認監視 夜（最終）</div></div>
+  </div>
+  <div class="note">※ 週次CSは日曜20:00、週次まとめは金18:30。入金確認・議事録→Trelloは <b>5/25(月)から</b>稼働開始。</div>
+</div>
+
+<!-- ===== 報告先 + トラブル ===== -->
+<div class="two">
+  <div>
+    <h2>⑥ 成果はどこに出る？</h2>
+    <div class="card" style="padding:8px 14px">
+    <table>
+      <tr><th>見たいもの</th><th>場所</th></tr>
+      <tr><td>1日のまとめ・アラート</td><td>Slack <code>#ai-日報</code>（平日19時）</td></tr>
+      <tr><td>判断が必要なこと</td><td>Slack <code>#ai-承認待ち</code></td></tr>
+      <tr><td>入金確認の結果</td><td>Slack <code>#入金確認用</code></td></tr>
+      <tr><td>顧客対応の下書き</td><td>Gmail下書き／Slack <code>#顧客対応</code></td></tr>
+      <tr><td>CS週次レポート</td><td>Slack＋Google スプレッドシート</td></tr>
+      <tr><td>タスク・物件</td><td>Trello（タスク管理／店舗物件候補）</td></tr>
+      <tr><td>マニュアル・台帳</td><td>Notion（顧客対応／人事 等）</td></tr>
+      <tr><td>クラウドcron実行履歴</td><td><a href="https://claude.ai/code/scheduled/">claude.ai/code/scheduled</a></td></tr>
+    </table>
+    </div>
+  </div>
+  <div>
+    <h2>⑦ 止まった時はここを見る</h2>
+    <div class="card" style="padding:8px 14px">
+    <table>
+      <tr><th>症状</th><th>確認先</th></tr>
+      <tr><td>夜レポートが来ない</td><td>クラウドcron履歴 → 手動再実行（5〜6分で復旧）。見張り番が宮さんにDM警報</td></tr>
+      <tr><td>承認監視が動かない</td><td>クラウド <code>trig_01SXfM…</code> 履歴</td></tr>
+      <tr><td>物件が止まった</td><td><code>店舗不動産探し/data/launchd.err</code></td></tr>
+      <tr><td>入金確認の異常</td><td>runnerが <code>#入金確認用</code> に🚨自動投稿</td></tr>
+      <tr><td>常駐ジョブの生死</td><td><code>launchctl list | grep circle</code></td></tr>
+      <tr><td>Slack連携が消えた</td><td><code>~/.claude.json.bak-*</code> から復旧</td></tr>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ロードマップ ===== -->
+<h2>⑧ これから自動化する順番（おすすめ）</h2>
+<div class="road">
+  <div class="card"><div class="n">① 月曜の初稼働を確認</div>入金確認・議事録→Trelloの初回結果<div class="note">5/25にSlack/Trelloで実結果を目視</div></div>
+  <div class="card"><div class="n">② KPI自動取得</div>Shopify/Square売上CSVを自動DL<div class="note">夜レポに数字を自動で埋める</div></div>
+  <div class="card"><div class="n">③ 仕入れ・発注</div>発注漏れリマインド<div class="note">期限前に自動アラート</div></div>
+  <div class="card"><div class="n">④ マーケ（X/IG）</div>投稿・反応分析<div class="note">フランカーブランド展開に向け</div></div>
+  <div class="card"><div class="n">⑤ 危機管理</div>SNS炎上の自動検知強化<div class="note">兆候の早期キャッチ</div></div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <b>このマップについて</b>
+  <div class="note" style="margin-top:6px">
+  ・<b>「業務」視点の全体図です。</b>技術詳細の正本は <code>AI秘書_自動化システム一覧.md</code>、経営要約は <code>AIエージェント体制まとめ.md</code><br>
+  ・顧客対応の中身は <a href="顧客対応AIダッシュボード.html">顧客対応AIダッシュボード</a><br>
+  ・<b>稼働状態の根拠（2026-05-22 実機確認＋当日対応）</b>: ローカル launchd 14本ロード済（入金確認を本日 prod でロード）／クラウド claude.ai トリガー有効3本（承認監視・統合夜・議事録→Trello を本日再有効化）／user crontab なし。入金確認・議事録→Trello は 5/25(月) から稼働。
+  </div>
+</div>
+
+</body>
+</html>

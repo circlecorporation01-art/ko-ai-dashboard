@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>顧客対応AI ダッシュボード | Knockout</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --text:#e8eaed; --muted:#9aa3b2; --accent:#e63946;
+    --green:#2ecc71; --amber:#f1c40f; --blue:#4d9fff; --gray:#6b7280;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+       background:var(--bg);color:var(--text);padding:28px;line-height:1.6}
+  h1{font-size:24px;letter-spacing:.02em}
+  h2{font-size:16px;margin:28px 0 14px;color:#fff;border-left:4px solid var(--accent);padding-left:10px}
+  .sub{color:var(--muted);font-size:13px;margin-top:4px}
+  .grid{display:grid;gap:16px}
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .kpi .num{font-size:34px;font-weight:700}
+  .kpi .lbl{color:var(--muted);font-size:13px;margin-top:2px}
+  .bar{height:8px;background:var(--panel2);border-radius:6px;margin-top:12px;overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:6px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;color:#0b0d10}
+  .b-green{background:var(--green)} .b-amber{background:var(--amber)}
+  .b-blue{background:var(--blue);color:#fff} .b-gray{background:var(--gray);color:#fff}
+  /* flow */
+  .flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+  .step{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;flex:1;min-width:150px}
+  .step .t{font-weight:700;font-size:13px}
+  .step .d{color:var(--muted);font-size:12px;margin-top:4px}
+  .arrow{display:flex;align-items:center;color:var(--accent);font-size:22px;font-weight:700}
+  .branch{display:flex;flex-direction:column;gap:8px;flex:1.4}
+  .pill{background:#12331f;border:1px solid #1d5b34;border-radius:10px;padding:8px 12px;font-size:12px}
+  .pill.warn{background:#33260f;border-color:#5b431d}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px}
+  td .role{color:var(--muted);font-size:12px}
+  .road{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .road .card .n{color:var(--accent);font-weight:700;font-size:13px}
+  .legend{font-size:12px;color:var(--muted);margin-top:8px}
+  .legend span{margin-right:14px}
+  @media(max-width:820px){.kpis,.road{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎧 顧客対応AI ダッシュボード</h1>
+  <div class="sub">Knockout ONLINE / Circle株式会社 ・ 自動返信＋集計＋AIエージェント体制を一目で把握 ・ 2026-05-20 時点</div>
+</header>
+
+<!-- KPI -->
+<h2>稼働サマリ</h2>
+<div class="grid kpis">
+  <div class="card kpi">
+    <div class="num">79<span style="font-size:18px">%</span></div>
+    <div class="lbl">全自動化の稼働率（11 / 14 稼働）</div>
+    <div class="bar"><i style="width:79%;background:var(--green)"></i></div>
+  </div>
+  <div class="card kpi">
+    <div class="num" style="color:var(--amber)">0<span style="font-size:18px">%</span></div>
+    <div class="lbl">顧客対応の稼働率（0 / 3）<br>※認証情報を入れれば100%</div>
+    <div class="bar"><i style="width:4%;background:var(--amber)"></i></div>
+  </div>
+  <div class="card kpi">
+    <div class="num">3</div>
+    <div class="lbl">顧客対応AI（日次 / 週次 / X DM）</div>
+    <div style="margin-top:10px"><span class="badge b-blue">構築済</span> <span class="badge b-amber">認証待ち</span></div>
+  </div>
+  <div class="card kpi">
+    <div class="num">11</div>
+    <div class="lbl">稼働中の自動化（日報・承認・物件 等）</div>
+    <div style="margin-top:10px"><span class="badge b-green">稼働中</span></div>
+  </div>
+</div>
+<div class="legend">
+  <span>🟢 <b>稼働中</b></span><span>🟡 <b>認証待ち</b>（コード完成・鍵入れで稼働）</span>
+  <span>🔵 <b>構築済</b></span><span>⚪ <b>設計/停止</b></span>
+</div>
+
+<!-- 日次フロー -->
+<h2>① 自動返信フロー（毎日 10:00 / 14:00 / 18:00）<span class="badge b-blue" style="margin-left:8px">cs_daily</span></h2>
+<div class="card">
+  <div class="flow">
+    <div class="step"><div class="t">📥 収集</div><div class="d">X DM・メンション ＋ メール問い合わせ（前回実行以降）</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="t">🧠 AI振り分け</div><div class="d">Notion知識ベース参照。文言でなく「内容（意図）」で判断</div></div>
+    <div class="arrow">→</div>
+    <div class="branch">
+      <div class="pill">✅ <b>答えられる</b> → 返信下書き作成<br>　メール=Gmail下書き ／ X=Slack #ai-承認待ち</div>
+      <div class="pill warn">❓ <b>知識が要る</b> → Slack <b>#顧客対応</b> へ確認依頼<br>　担当者がスレ返信 → 次回に下書き化</div>
+    </div>
+  </div>
+  <div class="sub" style="margin-top:12px">⚠️ AIは<b>送信しない</b>。必ず人が確認してから送る。「体調・副反応・苦情」は即<b>緊急エスカレ</b>。</div>
+</div>
+
+<!-- 週次フロー -->
+<h2>② 週次集計レポート（毎週 日曜 20:00）<span class="badge b-blue" style="margin-left:8px">cs_weekly</span></h2>
+<div class="card">
+  <div class="flow">
+    <div class="step"><div class="t">📥 1週間分</div><div class="d">先週日曜18:00〜今週日曜18:00 の問い合わせ（請求書・営業案内は除外）</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="t">🧠 分析</div><div class="d">分類・顧客の声・最適回答案・<b>再発防止策</b>（意図が同じものは1テーマに集約）</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="t">📊 出力</div><div class="d">Google Sheets（問い合わせ/再発防止/週次サマリ）＋ Slack要約</div></div>
+  </div>
+</div>
+
+<!-- エージェント一覧 -->
+<h2>③ AIエージェント体制（誰が何の担当か）</h2>
+<div class="card">
+<table>
+  <tr><th>担当領域</th><th>エージェント / 役割</th><th>稼働時刻</th><th>出力先</th><th>状態</th></tr>
+  <tr><td>顧客対応・日次</td><td>1日3回フロー<br><span class="role">返信下書き作成・難問エスカレ</span></td><td>10/14/18時</td><td>Gmail下書き / Slack</td><td><span class="badge b-amber">認証待ち</span></td></tr>
+  <tr><td>顧客対応・週次</td><td>週次CSレポート<br><span class="role">集計・再発防止策の提案</span></td><td>日曜20時</td><td>Sheets / Slack</td><td><span class="badge b-amber">認証待ち</span></td></tr>
+  <tr><td>顧客対応・X DM</td><td>X DM下書き<br><span class="role">朝の未返信DM下書き（日次に統合予定）</span></td><td>8:30</td><td>Slack</td><td><span class="badge b-amber">認証待ち</span></td></tr>
+  <tr><td>顧客対応・設計</td><td>CS秘書AI（Notion）<br><span class="role">一次返信30分・FAQ提案・クレーム即エスカレ</span></td><td>運用ルール</td><td>Notion / Slack</td><td><span class="badge b-gray">設計済</span></td></tr>
+  <tr><td>日報・記録</td><td>PC日報 / 活動ログ / 週次まとめ</td><td>毎日・常時</td><td>ローカル / Slack</td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>承認・統括</td><td>Slack秘書 / 承認監視 / 統合夜レポート</td><td>平日 9〜21時</td><td>Slack</td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>タスク化</td><td>Slack→Trello / MTG議事録→Trello</td><td>朝・月木</td><td>Trello</td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>物件探し</td><td>物件レーダー / 物件問い合わせ</td><td>平日10:33</td><td>Trello</td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>書類整理</td><td>Drive日次整理（GAS）</td><td>深夜2時</td><td>Drive</td><td><span class="badge b-green">稼働中</span></td></tr>
+</table>
+</div>
+
+<!-- ロードマップ -->
+<h2>④ 今後の設定（これをやれば顧客対応が100%稼働）</h2>
+<div class="road">
+  <div class="card"><div class="n">STEP 1</div>Xのキーを設定<br><span class="sub">developer.x.com の Keys and tokens を .env へ</span></div>
+  <div class="card"><div class="n">STEP 2-3</div>Google認証＋シートID<br><span class="sub">Gmail読取+下書き作成+Sheets書込を1認証で</span></div>
+  <div class="card"><div class="n">STEP 4-5</div>テスト実行<br><span class="sub">dry-run / --no-slack で中身確認</span></div>
+  <div class="card"><div class="n">STEP 6</div>スケジュール有効化<br><span class="sub">launchd に登録（日次3回・週次日曜）</span></div>
+</div>
+<div class="card" style="margin-top:14px">
+  <b>整理の方針</b>
+  <div class="sub" style="margin-top:6px">
+  ・X DM下書き（朝1回）は <b>1日3回フローに統合</b>して一本化（重複解消）<br>
+  ・難問の投げ先は Slack <b>#顧客対応</b>、緊急（健康被害・苦情）は <b>#ai-承認待ち＋DM</b><br>
+  ・知識ベースは Notion「顧客対応マニュアル」を参照（更新したらローカルも同期）<br>
+  ・手順書: <code>cs_weekly/SETUP_手順.md</code> ／ 体制詳細: <code>AIエージェント体制まとめ.md</code>
+  </div>
+</div>
+
+</body>
+</html>

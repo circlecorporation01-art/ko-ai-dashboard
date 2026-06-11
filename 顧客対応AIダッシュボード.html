@@ -50,7 +50,7 @@
 
 <header>
   <h1>🎧 顧客対応AI ダッシュボード</h1>
-  <div class="sub">Knockout ONLINE / Circle株式会社 ・ 自動返信＋集計＋AIエージェント体制を一目で把握 ・ 2026-05-20 時点</div>
+  <div class="sub">Knockout ONLINE / Circle株式会社 ・ 自動返信＋集計＋AIエージェント体制を一目で把握 ・ 更新 2026-06-11（✅自動送信 稼働中）</div>
 </header>
 
 <!-- KPI -->
@@ -91,11 +91,13 @@
     <div class="step"><div class="t">🧠 AI振り分け</div><div class="d">Notion知識ベース参照。文言でなく「内容（意図）」で判断</div></div>
     <div class="arrow">→</div>
     <div class="branch">
-      <div class="pill">✅ <b>答えられる</b> → 返信下書き作成<br>　メール=Gmail下書き ／ X=Slack #ai-承認待ち</div>
-      <div class="pill warn">❓ <b>知識が要る</b> → Slack <b>#顧客対応</b> へ確認依頼<br>　担当者がスレ返信 → 次回に下書き化</div>
+      <div class="pill">✅ <b>答えられる／回答が付いた</b> → <b>返信案</b>を Slack #顧客対応 スレッドに提示</div>
+      <div class="pill warn">❓ <b>知識が要る</b> → Slack <b>#顧客対応</b> へ🔴確認依頼<br>　担当者がスレ返信 → 返信案化</div>
     </div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="t">📤 ✅で自動送信</div><div class="d">担当が🔴に✅＝AIがお客様へ自動送信（X DM/メール）＋マニュアル登録</div></div>
   </div>
-  <div class="sub" style="margin-top:12px">⚠️ AIは<b>送信しない</b>。必ず人が確認してから送る。「体調・副反応・苦情」は即<b>緊急エスカレ</b>。</div>
+  <div class="sub" style="margin-top:12px">✅ <b>2026-06-11更新：✅を付けると自動送信＋マニュアル登録</b>（手動送信は不要）。直す時は✅を付けずスレッドに指示→AIが作り直し。既にメール/Xで返信済みの🔴は毎朝<b>自動で対応済み化</b>。「体調・副反応・苦情」は即<b>緊急エスカレ</b>。</div>
 </div>
 
 <!-- 週次フロー -->
@@ -115,9 +117,9 @@
 <div class="card">
 <table>
   <tr><th>担当領域</th><th>エージェント / 役割</th><th>稼働時刻</th><th>出力先</th><th>状態</th></tr>
-  <tr><td>顧客対応・日次</td><td>1日3回フロー<br><span class="role">返信下書き作成・難問エスカレ</span></td><td>10/14/18時</td><td>Gmail下書き / Slack</td><td><span class="badge b-amber">認証待ち</span></td></tr>
-  <tr><td>顧客対応・週次</td><td>週次CSレポート<br><span class="role">集計・再発防止策の提案</span></td><td>日曜20時</td><td>Sheets / Slack</td><td><span class="badge b-amber">認証待ち</span></td></tr>
-  <tr><td>顧客対応・X DM</td><td>X DM下書き<br><span class="role">朝の未返信DM下書き（日次に統合予定）</span></td><td>8:30</td><td>Slack</td><td><span class="badge b-amber">認証待ち</span></td></tr>
+  <tr><td>顧客対応・日次</td><td>1日3回フロー＋✅自動送信<br><span class="role">返信案作成・✅で自動送信＋マニュアル登録・難問エスカレ</span></td><td>10/14/18時＋30分毎</td><td>Slack / X DM / メール</td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>顧客対応・自己修復</td><td>未対応の自動照合<br><span class="role">既返信の🔴を対応済み化＋一覧リマインド</span></td><td>毎朝10時</td><td>Slack / Notion</td><td><span class="badge b-green">稼働中</span></td></tr>
+  <tr><td>顧客対応・週次</td><td>週次CSレポート<br><span class="role">集計・再発防止策の提案</span></td><td>日曜20時</td><td>Sheets / Slack</td><td><span class="badge b-green">稼働中</span></td></tr>
   <tr><td>顧客対応・設計</td><td>CS秘書AI（Notion）<br><span class="role">一次返信30分・FAQ提案・クレーム即エスカレ</span></td><td>運用ルール</td><td>Notion / Slack</td><td><span class="badge b-gray">設計済</span></td></tr>
   <tr><td>日報・記録</td><td>PC日報 / 活動ログ / 週次まとめ</td><td>毎日・常時</td><td>ローカル / Slack</td><td><span class="badge b-green">稼働中</span></td></tr>
   <tr><td>承認・統括</td><td>Slack秘書 / 承認監視 / 統合夜レポート</td><td>平日 9〜21時</td><td>Slack</td><td><span class="badge b-green">稼働中</span></td></tr>

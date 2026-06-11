@@ -36,8 +36,13 @@
 <body>
 <header>
   <h1>🎧 顧客対応 作業フロー説明書（担当者向け）</h1>
-  <div class="sub">Knockout ONLINE ／ 担当AI：<span class="tag">CS秘書AI</span>（自動：cs_daily＋cs_weekly）・2026-05-21</div>
+  <div class="sub">Knockout ONLINE ／ 担当AI：<span class="tag">CS秘書AI</span>（自動：cs_daily＋cs_weekly）・更新 2026-06-11</div>
 </header>
+
+<div class="crit" style="background:#eef9f1;border-color:#bce4c8;margin-bottom:14px">
+  ✅ <b>2026-06-11 大型アップデート：担当者の操作は「✅を付けるだけ」になりました。</b><br>
+  返信案がOKなら 🔴メッセージに <b>✅</b> を付ける → AIが<b>お客様へ自動送信（X DM／メール）＋マニュアル登録</b>まで自動で行います。手で送る必要はありません。
+</div>
 
 <h2>① このAIは何をしてくれる？</h2>
 <div class="card">
@@ -46,11 +51,13 @@
     <div class="arrow">→</div>
     <div class="step">🧠 <b>振り分け</b><br><span class="sub">内容を理解して「答えられる／要確認」に分類</span></div>
     <div class="arrow">→</div>
-    <div class="step">✍️ <b>下書き</b><br><span class="sub">答えられるものは返信案を作成</span></div>
+    <div class="step">✍️ <b>返信案</b><br><span class="sub">Slack #顧客対応 のスレッドに返信案を提示</span></div>
     <div class="arrow">→</div>
-    <div class="step">📚 <b>学習</b><br><span class="sub">新しい質問は対応後にマニュアルへ自動追加</span></div>
+    <div class="step">📤 <b>✅で自動送信</b><br><span class="sub">担当が✅を付けると、その文面をお客様へ自動送信</span></div>
+    <div class="arrow">→</div>
+    <div class="step">📚 <b>学習</b><br><span class="sub">送信した対応はマニュアルへ自動追加</span></div>
   </div>
-  <p class="sub" style="margin-top:10px">⚠️ AIは<b>送信しません</b>。送るのは必ず担当者です。緊急（体調・苦情）は即エスカレします。</p>
+  <p class="sub" style="margin-top:10px">⚠️ <b>✅＝「この文面で送ってOK」の合図。✅を付けた瞬間に自動送信されます</b>（押し間違い注意）。直したい時は✅を付けず、スレッドに指示を返信→AIが作り直します。緊急（体調・苦情）は即エスカレ。</p>
 </div>
 
 <h2>② これまで → これから（何が変わる）</h2>
@@ -62,32 +69,38 @@
     <li>対応漏れ・返信遅れが起きやすい</li>
   </ul></div>
   <div class="after"><h3>✅ これから（AI支援）</h3><ul>
-    <li>AIが集めて1か所に整理</li>
-    <li>返信案が用意される（確認して送るだけ）</li>
+    <li>AIが集めて Slack #顧客対応 に整理</li>
+    <li>返信案が用意される（<b>OKなら✅を付けるだけ＝AIが自動送信</b>）</li>
     <li>似た質問は過去ケースから自動回答</li>
     <li>難しいものは #顧客対応 に🔴で届く</li>
+    <li>送った対応は<b>マニュアルに自動登録</b>・対応漏れは毎朝<b>自動チェック</b></li>
   </ul></div>
 </div>
 
-<h2>③ 担当者の1日の作業フロー（AIは10時・14時・18時に自動実行）</h2>
+<h2>③ 担当者がやることは2ステップだけ</h2>
 <div class="card"><div class="tl">
-  <div class="row"><div class="t">10:00</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">新着を処理 → メールは<b>Gmailの下書き</b>、Xは<b>Slack #顧客対応</b>、答えられないものは <b>🔴確認必要</b>で #顧客対応 に質問</div></div>
-  <div class="row"><div class="t">随時</div><div class="who"><span class="badge b-you">担当</span></div><div class="d">①Gmailの下書きを確認して送信 ②#顧客対応 の🔴質問に<b>スレッドで回答</b> ③Xの返信案を確認してXから送信</div></div>
-  <div class="row"><div class="t">14:00</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">再処理。<b>10時に担当が答えた🔴質問は、ここで返信下書きになる</b>。新規対応はマニュアルに自動追加</div></div>
-  <div class="row"><div class="t">18:00</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">同様に処理（その日の最終）</div></div>
+  <div class="row"><div class="t">STEP 1</div><div class="who"><span class="badge b-you">担当</span></div><div class="d">🔴【確認必要】が来たら、<b>そのスレッドに回答の要点を返信</b>（社内メモ口調でOK）。スパム・返信不要なら「スパム」と書く。</div></div>
+  <div class="row"><div class="t">STEP 2</div><div class="who"><span class="badge b-you">担当</span></div><div class="d">AIが出す <b>✏️返信案</b> を見て、OKなら 🔴に <b>✅</b> を付けるだけ → <b>AIが自動送信＋マニュアル登録</b>。直したい時は✅を付けず、スレッドに「ここ直して」と返信（AIが作り直す）。</div></div>
+</div></div>
+
+<h2>④ AIの自動実行スケジュール（担当は意識しなくてOK）</h2>
+<div class="card"><div class="tl">
+  <div class="row"><div class="t">10/14/18時</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">新着を収集・振り分け。答えられないものは🔴で #顧客対応 に質問。担当の回答→返信案を作成。</div></div>
+  <div class="row"><div class="t">30分ごと</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">✅が付いた返信案を<b>お客様へ自動送信</b>＋マニュアル登録。直し指示があれば<b>作り直し</b>。</div></div>
+  <div class="row"><div class="t">毎朝10時</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d"><b>自己修復</b>：メール/Xで既に返信済みの🔴を自動照合して「✅対応済み」化＋マニュアル登録。残った未対応だけを<b>一覧でリマインド</b>（担当メンション付き）。</div></div>
   <div class="row"><div class="t">日曜20:00</div><div class="who"><span class="badge b-ai">AI</span></div><div class="d">1週間を集計し<b>再発防止策</b>つきレポート → Googleシート＋#ai-日報</div></div>
 </div></div>
 
-<h2>④ どこに何が届く？（迷ったらこの表）</h2>
+<h2>⑤ どこに何が届く？（迷ったらこの表）</h2>
 <div class="card"><table>
   <tr><th>種類</th><th>届く場所</th><th>担当者の操作</th></tr>
-  <tr><td>メールの返信案</td><td><b>Gmailの「下書き」</b>(info@)</td><td>確認 → 送信</td></tr>
-  <tr><td>Xの返信案</td><td><b>Slack #顧客対応</b></td><td>確認 → Xアプリから送信</td></tr>
-  <tr><td>🔴 AIが答えられない質問</td><td><b>Slack #顧客対応</b></td><td>スレッドで回答（次回AIが下書き化）</td></tr>
+  <tr><td>返信案（メール・X 共通）</td><td><b>Slack #顧客対応</b> のスレッド</td><td>OKなら <b>🔴に✅</b>（AIが自動送信）／直すならスレッドに指示</td></tr>
+  <tr><td>🔴 AIが答えられない質問</td><td><b>Slack #顧客対応</b></td><td>スレッドで回答 → AIが返信案化</td></tr>
+  <tr><td>⚠️ 自動送信に失敗</td><td><b>Slack #顧客対応</b></td><td>その時だけ手動で送信</td></tr>
   <tr><td>週次まとめ・再発防止策</td><td>Googleシート＋#ai-日報</td><td>見て改善に活かす</td></tr>
 </table></div>
 
-<h2>⑤ 緊急時（最優先）</h2>
+<h2>⑥ 緊急時（最優先）</h2>
 <div class="crit">🚨 「体調が悪い」「副反応」「苦情」を含む問い合わせは、AIが <b>即エスカレ</b>します。見つけたら<b>最優先</b>で対応してください。</div>
 
 <p class="sub" style="margin-top:20px">詳しい仕組み：Notion「顧客対応AI 自動化マニュアル」／ 全体像：AIエージェント秘書 全体説明.html</p>

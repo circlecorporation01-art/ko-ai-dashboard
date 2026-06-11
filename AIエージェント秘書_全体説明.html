@@ -31,7 +31,7 @@
 <body>
 <header>
   <h1>🤖 AIエージェント秘書 全体説明</h1>
-  <div class="sub">Knockout / Circle ・ ノックアウト本部「秘書AIチーム」全体図（計28体制） ・ 2026-05-21</div>
+  <div class="sub">Knockout / Circle ・ ノックアウト本部「秘書AIチーム」全体図（計28体制） ・ 2026-06-11</div>
 </header>
 
 <h2>① 全体サマリ</h2>
@@ -62,7 +62,7 @@
 
   <div class="dept"><div class="head">🛒 販売本部</div><div class="chips">
     <div class="chip"><div class="n"><span class="dot on"></span>🛒 EC運営秘書AI</div><div class="r">Shopify受注集計・商品ページ管理</div></div>
-    <div class="chip" style="border-color:var(--green)"><div class="n"><span class="dot on"></span>🗣 CS秘書AI ★</div><div class="r">問い合わせ一次対応・FAQ更新（自動化完成）</div></div>
+    <div class="chip" style="border-color:var(--green)"><div class="n"><span class="dot on"></span>🗣 CS秘書AI ★</div><div class="r">問い合わせ一次対応・✅で自動送信・マニュアル自動更新</div></div>
     <div class="chip"><div class="n"><span class="dot def"></span>マーケ秘書AI</div><div class="r">SNS・販促・反応分析</div></div>
     <div class="chip"><div class="n"><span class="dot def"></span>CRM秘書AI</div><div class="r">顧客関係・リピート施策</div></div>
     <div class="chip"><div class="n"><span class="dot def"></span>卸営業秘書AI</div><div class="r">卸先対応・営業</div></div>
@@ -100,7 +100,7 @@
 <h2>③ いま技術的に動いている自動処理（launchd / Remote cron）</h2>
 <div class="card"><div class="sub" style="margin-bottom:8px">秘書AIの一部は、PC上の自動処理として実稼働中です：</div>
   <table style="width:100%;border-collapse:collapse;font-size:13px">
-    <tr style="color:var(--muted)"><td style="padding:6px">🗣 CS秘書AI</td><td>毎日10/14/18時＋日曜20時</td><td>顧客対応の下書き・集計（cs_daily/cs_weekly）</td></tr>
+    <tr style="color:var(--muted)"><td style="padding:6px">🗣 CS秘書AI</td><td>毎日10/14/18時＋日曜20時</td><td>返信案提示→✅で自動送信・既返信の自動照合/集計（cs_daily/cs_weekly）</td></tr>
     <tr style="color:var(--muted)"><td style="padding:6px">🎯 統括秘書AI</td><td>平日19時＋9/12/15/18/21時</td><td>夜の統合レポート・承認監視</td></tr>
     <tr style="color:var(--muted)"><td style="padding:6px">📝 記録系</td><td>2分おき/18時/金18:30</td><td>活動ログ・PC日報・週次まとめ</td></tr>
     <tr style="color:var(--muted)"><td style="padding:6px">📋 タスク化</td><td>毎朝10:30/月木12時</td><td>Slack・議事録→Trello</td></tr>
@@ -116,5 +116,5 @@
   <div class="s ng">✖ Shopify（要連携）</div><div class="s ng">✖ Square（要連携）</div>
 </div></div>
 
-<div class="note">★ <b>顧客対応（CS秘書AI）</b>が現在もっとも自動化が進んでおり、X・メールの一次対応〜再発防止〜マニュアル自動更新まで稼働中。詳細は別紙「顧客対応 作業フロー説明書」。最終的に20名+体制を目指し、各本部の秘書AIを順次稼働させます。</div>
+<div class="note">★ <b>顧客対応（CS秘書AI）</b>が現在もっとも自動化が進んでおり、<b>収集→AI振り分け→Slack #顧客対応 に✏️返信案を提示→担当（松本）が🔴に✅→AIがお客様へ自動送信（X DM／メール）＋マニュアル自動登録</b>まで稼働中（<b>CS_AUTOSEND=1</b>）。直し指示はスレッド返信でAIが作り直し、「返信不要」と書けば🚫対応済み化。毎朝10時に既返信を自動照合して対応済み化＋マニュアル化し、残りを担当メンション付き一覧でリマインド。詳細は別紙「顧客対応 作業フロー説明書」。最終的に20名+体制を目指し、各本部の秘書AIを順次稼働させます。</div>
 </body></html>

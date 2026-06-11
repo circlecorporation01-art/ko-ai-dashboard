@@ -82,7 +82,7 @@
 <header>
   <h1>🤖 AI秘書・AIエージェント 全体マップ</h1>
   <div class="sub"><b>どのAIが・どの仕事を・いつ・どう報告するか</b> を構築者以外でも一目で ・ Knockout ONLINE / Circle株式会社<br>
-  最終更新 2026-05-22 ・ <b style="color:var(--green)">全スケジュールを実機検証済</b>（ローカル launchd + クラウド claude.ai トリガー20本 + crontab を直接確認）</div>
+  最終更新 2026-06-11 ・ <b style="color:var(--green)">全スケジュールを実機検証済</b>（ローカル launchd + クラウド claude.ai トリガー20本 + crontab を直接確認）</div>
 </header>
 
 <div class="legend">
@@ -115,8 +115,8 @@
     <div class="lbl">月曜(5/25)から始動<br>（入金確認 / 議事録→Trello）</div>
   </div>
   <div class="card kpi">
-    <div class="num" style="color:var(--amber)">1</div>
-    <div class="lbl">統合中<br>（X DM下書き→日次フローへ）</div>
+    <div class="num" style="color:var(--green)">✓</div>
+    <div class="lbl">統合済<br>（X DM下書き→CS日次に一本化）</div>
   </div>
   <div class="card kpi">
     <div class="num" style="color:var(--orange)">4</div>
@@ -197,9 +197,9 @@
   <tr><td colspan="6" style="padding:7px 4px;color:var(--muted);font-weight:700;font-size:12px">━ 顧客対応 ━</td></tr>
   <tr>
     <td><b>顧客対応AI・日次</b><br><span class="role">cs-daily</span></td>
-    <td>問い合わせ返信</td><td>Mac (launchd)</td><td>毎日 10:00 / 14:00 / 18:00</td>
-    <td><div class="flowmini">X DM・メンション＋メール問い合わせを収集 → 過去48ケースの知識ベースを参照しClaudeが返信下書き → 難問はエスカレ</div></td>
-    <td>Gmail下書き／Slack <code>#顧客対応</code>。緊急は <code>#ai-承認待ち</code>＋DM。<b>送信は人</b></td>
+    <td>問い合わせ返信（自動送信）</td><td>Mac (launchd)</td><td>毎日 10:00 / 14:00 / 18:00</td>
+    <td><div class="flowmini">X DM・メンション＋メール問い合わせを収集 → AI振り分け → 知識ベースを参照しClaudeが✏️返信案を Slack <code>#顧客対応</code> に投稿 → 担当(松本)が🔴に✅ → <b>AIがお客様へ自動送信(X DM/メール)＋マニュアル自動登録</b>（CS_AUTOSEND=1で稼働中）。直し指示はスレ返信で作り直し／「返信不要」で🚫対応済み</div></td>
+    <td>Slack <code>#顧客対応</code>（✏️返信案）。✅で <b>X DM/メールへ自動送信</b>＋マニュアル自動登録</td>
   </tr>
   <tr>
     <td><b>顧客対応AI・週次</b><br><span class="role">cs-weekly</span></td>
@@ -209,8 +209,8 @@
   </tr>
   <tr>
     <td><b>CS解決→Notion</b><br><span class="role">cs-resolve</span></td>
-    <td>新ケースのマニュアル化</td><td>Mac (launchd)</td><td><b>30分おき</b>に監視</td>
-    <td><div class="flowmini">担当者が回答→解決した新規ケースを検知 → 11項目で整形 → 知識ベースに追記（次回から自動回答に活用）</div></td>
+    <td>新ケースのマニュアル化</td><td>Mac (launchd)</td><td><b>30分おき</b>に監視＋毎朝10時に照合</td>
+    <td><div class="flowmini">✅された新規ケースを検知 → 11項目で整形 → 知識ベースに追記（次回から自動回答に活用）。<b>毎朝10時に既返信を自動照合し対応済み化＋マニュアル化＋担当(松本)メンション付き一覧リマインド</b></div></td>
     <td>Notion「顧客対応マニュアルDB」</td>
   </tr>
 
@@ -308,7 +308,7 @@
 </table>
 </div>
 
-<h3><span class="grouptitle g-soft">🔵 月曜(5/25)から始動・🟡 統合中</span></h3>
+<h3><span class="grouptitle g-soft">🔵 月曜(5/25)から始動・統合済(廃止)</span></h3>
 <div class="card" style="padding:8px 14px">
 <table>
   <tr><th style="width:15%">エージェント</th><th style="width:14%">担当業務</th><th style="width:11%">種別</th><th style="width:14%">スケジュール</th><th style="width:28%">手順・状況</th><th style="width:18%">報告先</th></tr>
@@ -319,10 +319,10 @@
     <td>Slack <code>#入金確認用</code>＋入金不明者シート</td>
   </tr>
   <tr>
-    <td><b>X DM下書き</b> <span class="badge b-amber">統合中</span><br><span class="role">x_dm_assistant</span></td>
-    <td>X DMの返信下書き</td><td>Mac (未ロード)</td><td>朝 8:30（旧）</td>
-    <td><div class="flowmini">役割が「顧客対応AI・日次」と重複 → 日次フローへ一本化中。単独では止めてOK（想定内）</div></td>
-    <td>（cs-daily の <code>#顧客対応</code> に統合）</td>
+    <td><b>X DM下書き</b> <span class="badge b-green">統合済(廃止)</span><br><span class="role">x_dm_assistant</span></td>
+    <td>X DMの返信下書き</td><td>Mac (停止)</td><td>—</td>
+    <td><div class="flowmini">役割が「顧客対応AI・日次(cs-daily)」と重複 → <b>cs-daily に統合済で廃止</b>。X DMの収集・✏️返信案・✅自動送信は cs-daily が担当</div></td>
+    <td>（cs-daily の <code>#顧客対応</code> に統合済）</td>
   </tr>
 </table>
 </div>
@@ -382,7 +382,7 @@
       <tr><td>1日のまとめ・アラート</td><td>Slack <code>#ai-日報</code>（平日19時）</td></tr>
       <tr><td>判断が必要なこと</td><td>Slack <code>#ai-承認待ち</code></td></tr>
       <tr><td>入金確認の結果</td><td>Slack <code>#入金確認用</code></td></tr>
-      <tr><td>顧客対応の下書き</td><td>Gmail下書き／Slack <code>#顧客対応</code></td></tr>
+      <tr><td>顧客対応の返信案・自動送信</td><td>Slack <code>#顧客対応</code>（✅で X DM/メールへ自動送信）</td></tr>
       <tr><td>CS週次レポート</td><td>Slack＋Google スプレッドシート</td></tr>
       <tr><td>タスク・物件</td><td>Trello（タスク管理／店舗物件候補）</td></tr>
       <tr><td>マニュアル・台帳</td><td>Notion（顧客対応／人事 等）</td></tr>

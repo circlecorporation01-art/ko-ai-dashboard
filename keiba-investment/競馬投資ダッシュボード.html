@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>競馬投資ダッシュボード｜期待値・資金管理エンジン</title>
+<style>
+  :root{
+    --bg:#0e1320; --panel:#161d2e; --panel2:#1d263b; --line:#2a3550;
+    --txt:#e8edf7; --sub:#9fb0cc; --buy:#28d17c; --skip:#566280;
+    --warn:#ffb020; --danger:#ff5d6c; --accent:#4c8dff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    -webkit-text-size-adjust:100%;}
+  header{padding:18px 16px;background:linear-gradient(135deg,#16203a,#0e1320);
+    border-bottom:1px solid var(--line);}
+  h1{margin:0;font-size:19px;letter-spacing:.5px}
+  .tag{display:inline-block;margin-top:6px;font-size:11px;color:var(--sub);
+    border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+  .wrap{max-width:920px;margin:0 auto;padding:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:14px;margin-bottom:14px}
+  .card h2{margin:0 0 10px;font-size:14px;color:var(--accent);
+    display:flex;align-items:center;gap:8px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  label{font-size:12px;color:var(--sub)}
+  input,select{background:var(--panel2);border:1px solid var(--line);color:var(--txt);
+    border-radius:8px;padding:8px;font-size:14px}
+  input[type=number]{width:84px}
+  button{background:var(--accent);color:#fff;border:0;border-radius:9px;
+    padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer}
+  button.ghost{background:transparent;border:1px solid var(--line);color:var(--sub)}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
+  th:nth-child(2),td:nth-child(2){text-align:left}
+  th{color:var(--sub);font-weight:600;font-size:11px}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}
+  .pill.buy{background:rgba(40,209,124,.15);color:var(--buy);border:1px solid rgba(40,209,124,.4)}
+  .pill.skip{background:rgba(86,98,128,.15);color:var(--skip);border:1px solid rgba(86,98,128,.4)}
+  .ev-pos{color:var(--buy);font-weight:700}
+  .ev-neg{color:var(--sub)}
+  .big{font-size:22px;font-weight:700}
+  .kpi{display:flex;gap:10px;flex-wrap:wrap}
+  .kpi>div{flex:1;min-width:130px;background:var(--panel2);border:1px solid var(--line);
+    border-radius:10px;padding:10px}
+  .kpi .l{font-size:11px;color:var(--sub)}
+  .note{font-size:12px;color:var(--sub);line-height:1.7}
+  .warnbox{background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.35);
+    border-radius:10px;padding:10px;font-size:12px;color:#ffd98a;line-height:1.7}
+  .delbtn{background:transparent;border:0;color:var(--danger);cursor:pointer;font-size:16px;padding:0 4px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .seg button{background:transparent;color:var(--sub);border:0;border-radius:0;padding:8px 14px}
+  .seg button.on{background:var(--accent);color:#fff}
+  .foot{font-size:11px;color:var(--sub);text-align:center;padding:18px 12px;line-height:1.8}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="padding-bottom:0">
+    <h1>🏇 競馬投資ダッシュボード</h1>
+    <span class="tag">期待値 × フラクショナル・ケリー × 資金管理</span>
+    <span class="tag">ギャンブルではなく投資として</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 設定 -->
+  <div class="card">
+    <h2>① 当日設定</h2>
+    <div class="row" style="gap:16px">
+      <div>
+        <label>バジェット</label><br>
+        <div class="seg" id="budgetSeg" style="margin-top:4px">
+          <button data-b="10000">1万円</button>
+          <button data-b="100000" class="on">10万円</button>
+        </div>
+      </div>
+      <div>
+        <label>当日投下上限（資金比）</label><br>
+        <select id="dailyCap" style="margin-top:4px">
+          <option value="0.10">10%（堅実）</option>
+          <option value="0.12" selected>12%（標準）</option>
+          <option value="0.20">20%（1万円向け上限）</option>
+        </select>
+      </div>
+      <div>
+        <label>ケリー係数</label><br>
+        <select id="kelly" style="margin-top:4px">
+          <option value="0.15">1/6（超保守）</option>
+          <option value="0.25" selected>1/4（推奨）</option>
+          <option value="0.5">1/2（攻め・振れ大）</option>
+        </select>
+      </div>
+      <div>
+        <label>妙味の最低ライン（EV）</label><br>
+        <select id="minEv" style="margin-top:4px">
+          <option value="1.0">1.00（損益分岐）</option>
+          <option value="1.05" selected>1.05（推奨）</option>
+          <option value="1.15">1.15（厳選）</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 入力 -->
+  <div class="card">
+    <h2>② 出走馬を入力（JRAアプリの出走表・確定オッズを見ながら）</h2>
+    <div class="row" style="margin-bottom:8px">
+      <div><label>馬番</label><br><input id="iNum" type="number" min="1" placeholder="5"></div>
+      <div><label>馬名</label><br><input id="iName" type="text" placeholder="馬名" style="width:150px"></div>
+      <div><label>単勝オッズ</label><br><input id="iOdds" type="number" step="0.1" min="1" placeholder="8.5"></div>
+      <div><label>見積勝率%</label><br><input id="iProb" type="number" step="1" min="0" max="100" placeholder="16"></div>
+      <div style="align-self:flex-end"><button onclick="addHorse()">＋ 追加</button></div>
+      <div style="align-self:flex-end"><button class="ghost" onclick="loadSample()">サンプル投入</button></div>
+      <div style="align-self:flex-end"><button class="ghost" onclick="clearAll()">全消去</button></div>
+    </div>
+    <div class="note">「見積勝率」＝あなたが馬場・馬体重・パドック・展開から決める“真の勝率”。
+      市場(1÷オッズ)より高いと判断した馬がオーバーレイ＝買い候補。</div>
+  </div>
+
+  <!-- 結果 -->
+  <div class="card">
+    <h2>③ 判定 — どの馬にいくら賭けるか</h2>
+    <table id="tbl">
+      <thead><tr>
+        <th>馬番</th><th>馬名</th><th>オッズ</th><th>見積<br>勝率</th>
+        <th>市場<br>勝率</th><th>期待値<br>EV</th><th>賭け額</th><th>判定</th><th></th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div id="empty" class="note" style="padding:16px 0">まだ馬が入力されていません。「サンプル投入」で動きを確認できます。</div>
+  </div>
+
+  <!-- サマリー -->
+  <div class="card">
+    <h2>④ 当日サマリー</h2>
+    <div class="kpi">
+      <div><div class="l">買い目数</div><div class="big" id="kBuys">0</div></div>
+      <div><div class="l">当日投下合計</div><div class="big" id="kTotal">0円</div></div>
+      <div><div class="l">資金に対する比率</div><div class="big" id="kRatio">0%</div></div>
+      <div><div class="l">想定回収率（買い目平均EV）</div><div class="big" id="kEv">–</div></div>
+    </div>
+    <div id="capWarn" style="margin-top:10px"></div>
+  </div>
+
+  <!-- ルール -->
+  <div class="card">
+    <h2>⑤ 鉄の規律（破産しないために）</h2>
+    <div class="warnbox">
+      ・<b>全レースは買わない。</b>妙味（EV&gt;1.05）が出た馬・レースだけ。見送りが利益を生む。<br>
+      ・<b>損切りライン</b>：1万円なら当日 −1,000円／10万円なら −4,000円 到達で即終了。<br>
+      ・<b>負けを取り返そうと賭け金を上げない。</b>（マーチンゲール＝破産への最短路）<br>
+      ・券種は<b>控除率の低い 複勝・ワイド中心</b>。三連単は宝くじ枠（総額の10%以内）まで。<br>
+      ・X（旧Twitter）の「鉄板」は<b>逆指標</b>。人気が集中した馬の期待値は消えている。
+    </div>
+  </div>
+
+  <div class="foot">
+    ⚠️ 本ツールは資金管理・期待値判断の補助です。「絶対に負けない」馬券は数学的に存在しません
+    （JRA控除率 約20〜30%）。最終判断と責任は投資家であるあなたにあります。<br>
+    無理のない範囲で。やめられない感覚があれば一度離れてください。
+  </div>
+</div>
+
+<script>
+let BUDGET = 100000;
+let horses = [];
+
+document.querySelectorAll('#budgetSeg button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('#budgetSeg button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); BUDGET=+b.dataset.b;
+    // 1万円なら上限20%をデフォルトに寄せる
+    if(BUDGET===10000){document.getElementById('dailyCap').value='0.20';}
+    else{document.getElementById('dailyCap').value='0.12';}
+    render();
+  };
+});
+['dailyCap','kelly','minEv'].forEach(id=>document.getElementById(id).onchange=render);
+
+function addHorse(){
+  const num=+document.getElementById('iNum').value;
+  const name=document.getElementById('iName').value||('馬'+num);
+  const odds=+document.getElementById('iOdds').value;
+  const prob=(+document.getElementById('iProb').value)/100;
+  if(!odds||odds<1||!prob){alert('オッズ(1以上)と見積勝率を入れてください');return;}
+  horses.push({num,name,odds,prob});
+  ['iNum','iName','iOdds','iProb'].forEach(i=>document.getElementById(i).value='');
+  render();
+}
+function delHorse(i){horses.splice(i,1);render();}
+function clearAll(){horses=[];render();}
+function loadSample(){
+  horses=[
+    {num:1,name:'サンプルA(1番人気)',odds:3.2,prob:0.24},
+    {num:5,name:'サンプルB(軽ハンデ)',odds:8.5,prob:0.16},
+    {num:8,name:'サンプルC',odds:15,prob:0.05},
+    {num:11,name:'サンプルD',odds:6.0,prob:0.20},
+    {num:14,name:'サンプルE',odds:22,prob:0.03},
+  ];
+  render();
+}
+
+function fracKelly(prob,odds,k){
+  const b=odds-1, q=1-prob;
+  if(b<=0)return 0;
+  const f=(b*prob-q)/b;
+  return Math.max(0,f)*k;
+}
+
+function render(){
+  const k=+document.getElementById('kelly').value;
+  const minEv=+document.getElementById('minEv').value;
+  const dailyCap=+document.getElementById('dailyCap').value;
+  const PER_BET_CAP=0.06;
+  let rows=horses.map(h=>{
+    const ev=h.prob*h.odds;
+    const kf=Math.min(fracKelly(h.prob,h.odds,k),PER_BET_CAP);
+    let stake=Math.round(BUDGET*kf/100)*100;
+    const buy=(ev-1)>=(minEv-1) && stake>=100;
+    return {...h,ev,kf,stake:buy?stake:0,buy,market:1/h.odds};
+  });
+  // 当日上限で按分（EV高い順優先）
+  const cap=BUDGET*dailyCap;
+  let total=0;
+  rows.filter(r=>r.stake>0).sort((a,b)=>b.ev-a.ev).forEach(r=>{
+    if(total+r.stake>cap){r.stake=Math.max(0,Math.floor((cap-total)/100)*100); if(r.stake===0)r.buy=false;}
+    total+=r.stake;
+  });
+
+  const tb=document.getElementById('tbody'); tb.innerHTML='';
+  rows.sort((a,b)=>b.ev-a.ev).forEach((r,idx)=>{
+    const i=horses.indexOf(horses.find(h=>h.num===r.num&&h.name===r.name));
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${r.num}</td><td>${r.name}</td><td>${r.odds.toFixed(1)}</td>
+      <td>${(r.prob*100).toFixed(0)}%</td>
+      <td style="color:#9fb0cc">${(r.market*100).toFixed(0)}%</td>
+      <td class="${r.ev>=1?'ev-pos':'ev-neg'}">${r.ev.toFixed(2)}</td>
+      <td>${r.stake?r.stake.toLocaleString()+'円':'—'}</td>
+      <td><span class="pill ${r.buy?'buy':'skip'}">${r.buy?'BUY':'見送り'}</span></td>
+      <td><button class="delbtn" onclick="delHorse(${i})">×</button></td>`;
+    tb.appendChild(tr);
+  });
+  document.getElementById('empty').style.display=horses.length?'none':'block';
+
+  const buys=rows.filter(r=>r.buy);
+  const sum=buys.reduce((s,r)=>s+r.stake,0);
+  const avgEv=buys.length?buys.reduce((s,r)=>s+r.ev,0)/buys.length:0;
+  document.getElementById('kBuys').textContent=buys.length;
+  document.getElementById('kTotal').textContent=sum.toLocaleString()+'円';
+  document.getElementById('kRatio').textContent=(sum/BUDGET*100).toFixed(1)+'%';
+  document.getElementById('kEv').textContent=buys.length?avgEv.toFixed(2):'–';
+  const cw=document.getElementById('capWarn');
+  if(sum>=cap-1){cw.innerHTML='<div class="warnbox">当日投下上限に到達。これ以上は買い増さない。</div>';}
+  else if(buys.length===0&&horses.length>0){cw.innerHTML='<div class="warnbox">妙味（EV基準超え）の馬がありません。<b>今日のこのレースは「見送り」が正解です。</b></div>';}
+  else{cw.innerHTML='';}
+}
+render();
+</script>
+</body>
+</html>

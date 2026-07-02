@@ -118,7 +118,7 @@
 <!-- ① 何ができるようになったか -->
 <h2>① 何ができるようになったか（できること一覧）</h2>
 <div class="feat">
-  <div class="f"><div class="ic">📝</div><div class="ttl">日報の自動生成</div><div class="ds">PC操作ログから当日の業務日報を毎日18:00に自動作成。</div></div>
+  <div class="f"><div class="ic">📝</div><div class="ttl">日報の自動生成</div><div class="ds">当日の業務日報ドラフトを毎日18:46に自動作成し <b>#日報用</b> へ投稿。指定形式（1〜5のみ）で、人の記入＋AI自動実行業務＋顧客の声を統合。仕様は <code>CLAUDE.md</code>。</div></div>
   <div class="f"><div class="ic">✅</div><div class="ttl">承認の取りこぼし監視</div><div class="ds">夜レポ・承認待ちへの返信を平日5回（9/12/15/18/21時）拾って実行。</div></div>
   <div class="f"><div class="ic">🏢</div><div class="ttl">店舗物件の自動リストアップ</div><div class="ds">不動産5サイトを毎日巡回し新規物件をTrelloへ。</div></div>
   <div class="f"><div class="ic">🗂️</div><div class="ttl">Slack→Trello タスク化</div><div class="ds">議事録・依頼の投稿を検出してタスクカードに変換。</div></div>
@@ -138,7 +138,7 @@
   <tr><td><b>活動ログ収集</b></td><td>launchd</td><td>2分おき 24h</td><td>PC操作・Brave履歴・Slack・Trello投稿を集約（日報の元データ）</td><td><code>~/.local/logs/activity/</code></td></tr>
   <tr><td><b>物件自動リストアップ</b></td><td>launchd</td><td>平日 10:33</td><td>店舗不動産5サイト巡回→新規物件をTrello投入</td><td>Trello「店舗物件候補」</td></tr>
   <tr><td><b>Slack→Trello</b></td><td>launchd</td><td>毎朝 10:30</td><td>特定Slackメッセージ→Trelloカード化</td><td><code>slack-to-trello/logs/</code></td></tr>
-  <tr><td><b>日報自動生成(PCログ)</b></td><td>launchd</td><td>毎日 18:00</td><td>当日のPC活動ログをMarkdown日報に集約</td><td><code>~/.local/logs/daily-reports/</code></td></tr>
+  <tr><td><b>日報自動生成</b></td><td>launchd</td><td>毎日 18:46</td><td>当日の活動ログ＋#日報用の記入＋AI自動実行業務＋#顧客対応の顧客の声を、指定形式(1〜5のみ)の日報ドラフトに統合し <code>#日報用</code> へ投稿（DM送信禁止）</td><td>Slack <code>#日報用</code> ／ <code>~/.local/logs/daily-reports/</code></td></tr>
   <tr><td><b>週次まとめ</b></td><td>launchd</td><td>金 18:30</td><td>一週間の活動ログを集約</td><td><code>~/.local/logs/weekly-reports/</code></td></tr>
   <tr><td><b>X DM下書き生成</b></td><td>launchd</td><td>毎朝 08:30</td><td>未返信DM検出→Claude下書き→<code>#ai-承認待ち</code>にスレ投稿</td><td><code>x_dm_assistant/logs/</code></td></tr>
   <tr><td colspan="5" style="color:var(--muted);font-size:12px;padding:7px 4px">※上記6本に加え、承認補完・記録系の常駐ジョブを含めローカル launchd は計11本。クラウド系は下表。</td></tr>

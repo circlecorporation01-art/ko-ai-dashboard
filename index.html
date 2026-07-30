@@ -115,10 +115,37 @@
   <span>種別: launchd=Mac常駐 ／ クラウドcron=claude.ai ／ GAS=Google上</span>
 </div>
 
+<!-- ★ 日報改善: 本人の実務を必ず反映 -->
+<h2>📋 日報メモ（本人の実務を必ず反映）<span class="badge b-purple" style="margin-left:8px">改善 2026-07-30</span></h2>
+<div class="card" style="border-color:#5a3a85;background:#160f26">
+  <div style="font-size:14px;font-weight:800;color:#d9c2ff;margin-bottom:6px">なぜ「働いていないように見えた」のか（原因）</div>
+  <div class="sub" style="margin-top:0">これまでの夜間日報は <b>Slack・Gmail・Drive・台帳・KPI から自動生成</b>するだけで、<b>本人が実際にやった作業（外出・電話・店舗指示・研修・面接など、ログに残らない仕事）を書き込む入口がありませんでした</b>。さらに KPI 接続が切れているため、実際は稼働していても各部門が「本日活動なし」と表示され、日報が薄く見えていました。</div>
+
+  <div style="font-size:14px;font-weight:800;color:#7ee7a6;margin:16px 0 6px">改善（この日報メモを最優先で反映）</div>
+  <div class="sub" style="margin-top:0">下のフォームに <b>今日やったこと</b> を書くだけで「日報メモ」シートに保存され、<b>夜間統合レポートが当日分を読み、日報の冒頭【0. 本日の実務（本人記入）】として必ず反映</b>します。1行でも書けば「活動なし」表示は出ません。ゼロ操作の自動集計はそのまま、<b>本人メモが常に正</b>として上に乗ります。</div>
+
+  <form action="https://script.google.com/macros/s/AKfycbwZUFnO80Byrnbj5Ik_baAWUlKhBYTaoJixT-hILyfVLcKeA9hCk6LVCnUHE2PfApu3uQ/exec" method="POST" target="dailythanks" style="margin:14px 0 8px">
+    <input type="hidden" name="type" value="daily">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start">
+      <input name="author" placeholder="記入者（例：宮さん）" style="flex:0 0 180px;padding:9px 11px;border-radius:8px;border:1px solid #2a2f3a;background:#1e222b;color:#e8eaed">
+      <textarea name="work" placeholder="今日やったこと・指示したこと（例：北新地店舗へ店舗指示／午後 新人研修・面接／卸フォロー 等。箇条書きでOK）" required rows="3" style="flex:1;min-width:260px;padding:9px 11px;border-radius:8px;border:1px solid #2a2f3a;background:#1e222b;color:#e8eaed"></textarea>
+      <button type="submit" style="padding:10px 20px;border:0;border-radius:8px;background:#b18cff;color:#0b0d10;font-weight:700;cursor:pointer">日報に反映</button>
+    </div>
+  </form>
+  <iframe name="dailythanks" style="width:100%;max-width:420px;height:46px;border:0"></iframe>
+
+  <div style="font-size:13px;font-weight:700;color:#fff;margin:14px 0 6px">改善後の日報テンプレート（冒頭に本人欄を追加）</div>
+  <div class="flowmini" style="white-space:pre-wrap;line-height:1.7">【0. 本日の実務（本人記入）】 ★最優先で反映 ← <b style="color:#d9c2ff">今回追加</b>
+　・本日実施した仕事／指示（店舗指示・研修・面接・外出・電話 等）
+　・在宅／体調不良の日も、遠隔で対応した業務をここに記録
+【1. 危機管理アラート】〜【9. 雑務統計】 … 従来どおり自動集計</div>
+  <div class="note">運用ルール: 本人メモが1件でもある日は「活動なし」を出さない／KPI未接続は「要接続復旧」と明記し、本人の実務を薄く見せない。</div>
+</div>
+
 <!-- ① 何ができるようになったか -->
 <h2>① 何ができるようになったか（できること一覧）</h2>
 <div class="feat">
-  <div class="f"><div class="ic">📝</div><div class="ttl">日報の自動生成</div><div class="ds">PC操作ログから当日の業務日報を毎日18:00に自動作成。</div></div>
+  <div class="f"><div class="ic">📝</div><div class="ttl">日報の自動生成＋本人メモ反映</div><div class="ds">当日の業務日報を毎日自動作成。<b>本人が記入した「日報メモ」を冒頭【0.本日の実務】に必ず反映</b>（外出・店舗指示・研修等も残る）。</div></div>
   <div class="f"><div class="ic">✅</div><div class="ttl">承認の取りこぼし監視</div><div class="ds">夜レポ・承認待ちへの返信を平日5回（9/12/15/18/21時）拾って実行。</div></div>
   <div class="f"><div class="ic">🏢</div><div class="ttl">店舗物件の自動リストアップ</div><div class="ds">不動産5サイトを毎日巡回し新規物件をTrelloへ。</div></div>
   <div class="f"><div class="ic">🗂️</div><div class="ttl">Slack→Trello タスク化</div><div class="ds">議事録・依頼の投稿を検出してタスクカードに変換。</div></div>

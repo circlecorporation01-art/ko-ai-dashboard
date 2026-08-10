@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>スタッフ体感レビュー 指示＆テンプレート | Knockout / Circle株式会社</title>
+<style>
+  :root{
+    --bg:#0e1014; --panel:#171a21; --panel2:#1e222b; --panel3:#232834; --line:#2a2f3a;
+    --text:#e8eaed; --muted:#9aa3b2; --accent:#e63946;
+    --green:#2ecc71; --amber:#f1c40f; --blue:#4d9fff; --orange:#ff8c42; --gray:#6b7280; --red:#ff5b6e; --purple:#b18cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+       background:var(--bg);color:var(--text);padding:28px 26px 70px;line-height:1.6;max-width:1080px;margin:0 auto}
+  h1{font-size:25px;letter-spacing:.02em}
+  h2{font-size:17px;margin:38px 0 14px;color:#fff;border-left:4px solid var(--accent);padding-left:11px}
+  h3{font-size:14px;color:var(--muted);margin:18px 0 8px;font-weight:600}
+  .sub{color:var(--muted);font-size:13px;margin-top:5px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:14px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;color:#0b0d10;white-space:nowrap}
+  .b-green{background:var(--green)} .b-amber{background:var(--amber)} .b-blue{background:var(--blue);color:#fff}
+  .b-red{background:var(--red);color:#fff} .b-purple{background:var(--purple);color:#0b0d10}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+  th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;background:var(--panel2)}
+  td b{color:#fff}
+  .k{width:150px;color:#fff;font-weight:700;white-space:nowrap}
+  code{background:var(--panel3);padding:1px 6px;border-radius:5px;font-size:12px;color:#cdd5e0}
+  ul{margin:0 0 0 18px} li{margin:6px 0;font-size:13px}
+  .paste{background:#0c1620;border:1px solid #234;border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.85;white-space:pre-wrap}
+  .paste b{color:#fff}
+  .warn{background:#2a1418;border:1px solid #5b1d28;border-radius:12px;padding:14px 16px;margin-top:12px}
+  .warn .t{color:#ffd2d7;font-weight:800;font-size:13px;margin-bottom:6px}
+  .warn li{color:#f4c9cf}
+  .ok{background:#10261a;border:1px solid #1d5b34;border-radius:12px;padding:14px 16px;margin-top:12px}
+  .ok .t{color:var(--green);font-weight:800;font-size:13px;margin-bottom:6px}
+  .pill{display:inline-block;background:var(--panel3);border:1px solid var(--line);border-radius:20px;padding:2px 10px;font-size:12px;color:#cdd5e0;margin:3px 4px 0 0}
+  .note{font-size:12.5px;color:var(--muted);margin-top:8px}
+  .scale{font-size:12.5px;color:#cdd5e0}
+  .fill{color:var(--amber)}
+  @media(max-width:820px){ .k{width:auto} body{padding:22px 16px 60px} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧪 スタッフ体感レビュー ― 指示＆記入テンプレート</h1>
+  <div class="sub"><b>目的：</b>スタッフ自身が自社（KO / Knockout）製品を体感し、その一次情報を宣伝・接客・商品ページに使える形で残す ・ Knockout ONLINE / Circle株式会社<br>
+  作成 2026-08-10 ・ 対象：店舗在庫のKO全商品（各1個をテスト用に使用＝在庫は各1個減）</div>
+</header>
+
+<!-- ===================== ① 指示文 ===================== -->
+<h2>① スタッフへの指示文（Slackにそのまま貼れる文面）</h2>
+<div class="card">
+  <div class="paste">@all
+
+【KO製品 体感レビューのお願い】
+
+スタッフ自身に自社製品を"使ってみた人"として体感してもらい、その感想を接客・SNS・商品ページの宣伝にそのまま使わせてもらうための企画です。
+店舗にあるKO製品を<b>各1個ずつテスト用に開封</b>します（＝全商品、在庫が1個ずつ減ります）。
+
+■ やること
+① 割り当てられた（または自分が担当したい）KO商品を実際に使ってみる
+② 使ったら、下の<b>レビューテンプレート</b>に沿って記入する（1商品＝1枚）
+③ 記入した内容を <b>#（提出先チャンネル）</b> に投稿する
+
+■ 記入してほしいポイント
+・<b>どれくらいで体感が来たか</b>（使ってから何分で効き始めたか）
+・<b>味／フレーバー</b>はどうだったか
+・<b>どんな体感だったか</b>（リラックス・眠気・集中・多幸感 など）
+・<b>どんな時・どんな人にオススメか</b>（就寝前／仕事終わり／気分転換 など）
+
+■ ルール
+・<b>正直に</b>書く（弱かった・イマイチも大事な情報です。盛らなくてOK）
+・<b>就業中の運転・危険作業がある人は勤務外に</b>／体調が悪い時はやらない
+・1回の量は<b>通常の使い方の範囲</b>で（"効かせよう"として過剰摂取しない）
+・商品写真＋（可能なら）使用シーンの写真を1枚添える
+
+■ 締切
+<b>（例）8/17（日）まで</b>に提出をお願いします。
+
+不明点はこのスレッドで質問してください。よろしくお願いします🙏</div>
+  <div class="note">※ <span class="fill">（提出先チャンネル）</span> と <span class="fill">締切日</span> は運用に合わせて差し替えてください。担当割り当て表を別途作る場合は「担当商品」を各自に事前に振ると回収がスムーズです。</div>
+</div>
+
+<div class="warn">
+  <div class="t">⚠️ 記載時の注意（コンプラ・薬機法まわり）</div>
+  <ul>
+    <li>効果効能の<b>断定・医療的表現はNG</b>（「治る」「不眠が治った」「痛みが消える」等）。あくまで<b>個人の体感・感想</b>として書く。</li>
+    <li>年齢・使用対象など商品ごとの<b>使用上の注意を守る</b>。未成年・妊娠授乳中・運転前などの禁止事項に該当する人はテスト対象外。</li>
+    <li>そのままSNSに転用する前提なので、<b>他社比較の断定や誇大表現は避ける</b>。</li>
+  </ul>
+</div>
+
+<!-- ===================== ② レビューテンプレート ===================== -->
+<h2>② レビュー記入テンプレート（1商品＝1枚 / コピペ用）</h2>
+<div class="sub">X（Twitter）のレビュー系アカウントが挙げる項目を参考に、<b>「オンセット→強さ→質→持続→味→シーン」</b>が一目で伝わる並びにしています。<span class="fill">黄色部分</span>を埋めるだけで完成します。</div>
+
+<div class="card">
+<table>
+  <tr><th class="k">項目</th><th>記入内容</th></tr>
+  <tr><td class="k">商品名 / 型番</td><td class="fill">例）KO ●● 〔フレーバー名〕</td></tr>
+  <tr><td class="k">種別</td><td><span class="pill">リキッド/ベイプ</span><span class="pill">グミ/経口</span><span class="pill">オイル</span><span class="pill">ドリンク</span><span class="pill">その他</span>（該当を残す）</td></tr>
+  <tr><td class="k">成分 / 含有量</td><td class="fill">例）●●●● / 1個(1本)あたり ●●mg</td></tr>
+  <tr><td class="k">記入者 / 日時</td><td class="fill">氏名・店舗 / 8/●● ●●:●●</td></tr>
+  <tr><td class="k">使用量・方法</td><td class="fill">例）●パフ／●ml／●個 ・ 空腹or食後 ・ 単体使用</td></tr>
+  <tr><td class="k">① 体感までの時間<br>（オンセット）</td><td class="fill">使ってから 約●●分</td></tr>
+  <tr><td class="k">② ピーク / 持続</td><td class="fill">一番効いた：約●●分後 ／ 持続：約●●分〜●時間</td></tr>
+  <tr><td class="k">③ 体感の強さ</td><td class="scale"><b class="fill">★●/5</b>　（1=ほぼ無し / 3=しっかり / 5=かなり強い）</td></tr>
+  <tr><td class="k">④ 体感の質<br>（複数選択可）</td><td>
+    <span class="pill">リラックス</span><span class="pill">眠気・入眠</span><span class="pill">多幸感・上がる</span><span class="pill">集中・クリア</span><span class="pill">落ち着き</span><span class="pill">ボディ寄り(体)</span><span class="pill">ヘッド寄り(頭)</span><span class="pill">その他</span>
+    <div class="note fill">└ ひとこと補足：例）肩の力が抜けてゆるく眠くなる感じ</div></td></tr>
+  <tr><td class="k">⑤ 味 / フレーバー</td><td class="scale"><b class="fill">★●/5</b>　<span class="fill">例）甘さ控えめで自然。吸った後の後味がスッキリ／ケミカル感は少ない</span></td></tr>
+  <tr><td class="k">⑥ 吸い心地・口当たり</td><td class="fill">例）喉ごしなめらか・むせない ／（経口）飲みやすい・後味残らない</td></tr>
+  <tr><td class="k">⑦ おすすめのシーン</td><td>
+    <span class="pill">就寝前</span><span class="pill">仕事終わり</span><span class="pill">休日の昼</span><span class="pill">気分転換</span><span class="pill">リラックスしたい時</span><span class="pill">集中したい時</span>
+    <div class="note fill">└ 具体的に：例）残業後の切り替え／寝る30分前</div></td></tr>
+  <tr><td class="k">⑧ こんな人におすすめ</td><td class="fill">例）強い体感より"ゆるく整えたい"人・初めての人にも</td></tr>
+  <tr><td class="k">⑨ 気になった点<br>（正直に）</td><td class="fill">例）人によっては甘めに感じるかも／体感は穏やかめ</td></tr>
+  <tr><td class="k">⑩ 総合評価</td><td class="scale"><b class="fill">★●/5</b>　＋ リピートしたい？ <span class="pill">する</span><span class="pill">しない</span><span class="pill">気分で</span></td></tr>
+  <tr><td class="k">📷 写真</td><td class="fill">商品写真 ／ 使用シーン写真（あれば）を添付</td></tr>
+  <tr><td class="k">📣 SNS用ひとこと<br>（そのまま投稿できる80〜140字）</td><td class="fill">例）KOの●●試してみた。●●分くらいでじんわりリラックス、味も甘すぎず◎。寝る前の切り替えにちょうどいい体感でした。#KO #Knockout</td></tr>
+</table>
+</div>
+
+<div class="ok">
+  <div class="t">✅ 記入例（イメージ / このレベル感でOK）</div>
+  <div class="scale" style="line-height:1.8">
+  <b>商品名：</b>KO ●● 〔グレープ〕　<b>種別：</b>リキッド/ベイプ　<b>含有量：</b>1本 ●●mg<br>
+  <b>使用：</b>3パフ・食後・単体　<b>①オンセット：</b>約8分　<b>②ピーク/持続：</b>20分後 / 約2時間<br>
+  <b>③強さ：</b>★3/5　<b>④質：</b>リラックス＋眠気（ボディ寄り／肩がゆるむ感じ）<br>
+  <b>⑤味：</b>★4/5 甘さ控えめで自然、後味スッキリ　<b>⑥吸い心地：</b>むせずなめらか<br>
+  <b>⑦シーン：</b>就寝前・仕事終わり　<b>⑧おすすめ：</b>強すぎない体感が好きな人／初めての人<br>
+  <b>⑨気になった点：</b>体感は穏やかめ、ガツンが欲しい人には物足りないかも　<b>⑩総合：</b>★4/5・リピートする<br>
+  <b>📣SNS用：</b>「KOの●●、8分くらいでじんわり来て肩の力が抜ける感じ。味も甘すぎず◎。寝る前の一本にちょうどいい体感でした🌙 #KO #Knockout」
+  </div>
+</div>
+
+<!-- ===================== ③ 採点基準 ===================== -->
+<h2>③ 採点・記入の基準（レビューを揃えるための共通ルール）</h2>
+<div class="card">
+  <h3>体感の強さ（★の目安）</h3>
+  <table>
+    <tr><th>★1</th><th>★2</th><th>★3</th><th>★4</th><th>★5</th></tr>
+    <tr>
+      <td>言われないと分からない</td>
+      <td>なんとなく変化を感じる</td>
+      <td>はっきり体感がある（基準）</td>
+      <td>しっかり強い・満足</td>
+      <td>かなり強い・慣れてない人は注意</td>
+    </tr>
+  </table>
+  <h3 style="margin-top:16px">記入のコツ</h3>
+  <ul>
+    <li><b>時間は"数字"で</b>：体感までの分数・持続時間を書くと接客でもそのまま使える。</li>
+    <li><b>盛らない</b>：弱い・イマイチも重要データ。正直な方が信頼される宣伝になる。</li>
+    <li><b>条件を書く</b>：空腹/食後・量・単体使用かで体感は変わるので必ず添える。</li>
+    <li><b>SNS用ひとことは"体感→味→おすすめシーン"の順</b>にすると読まれやすい。</li>
+  </ul>
+  <div class="note">回収した内容は 商品ページ・接客トーク・X投稿の素材として活用します。良い一言は商品開発／マーケの台帳にも反映されます。</div>
+</div>
+
+<footer style="margin-top:34px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:14px">
+  Knockout ONLINE / Circle株式会社 ・ スタッフ体感レビュー 指示＆テンプレート ・ v1（2026-08-10）
+</footer>
+
+</body>
+</html>
